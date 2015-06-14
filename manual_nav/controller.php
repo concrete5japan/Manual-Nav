@@ -15,7 +15,9 @@ class Controller extends Package
 	protected $appVersionRequired = '5.7.1';
 	protected $pkgVersion = '1.0.0';
 	protected static $blockTypes = array(
-        array('handle' => 'manual_nav', 'set' => 'navigation')
+        array(
+			'handle' => 'manual_nav', 'set' => 'navigation',
+		)
     );
 
 	public function getPackageDescription()
@@ -31,20 +33,18 @@ class Controller extends Package
 	public function install()
 	{
 		$pkg = parent::install();
-	        BlockType::installBlockTypeFromPackage('manual_nav', $pkg);
-
-			foreach (Self::$blockTypes as $blockType) {
-	            $existingBlockType = BlockType::getByHandle($blockType['handle']);
-	            if (!$existingBlockType) {
-	                BlockType::installBlockTypeFromPackage($blockType['handle'], $pkg);
-	            }
-	            if (isset($blockType['set']) && $blockType['set']) {
-	                $navigationBlockTypeSet = BlockTypeSet::getByHandle('navigation');
-	                if ($navigationBlockTypeSet) {
-	                    $navigationBlockTypeSet->addBlockType(BlockType::getByHandle($blockType['handle']));
-	                }
-	            }
-	        }
+		foreach (Self::$blockTypes as $blockType) {
+            $existingBlockType = BlockType::getByHandle($blockType['handle']);
+            if (!$existingBlockType) {
+                BlockType::installBlockTypeFromPackage($blockType['handle'], $pkg);
+            }
+            if (isset($blockType['set']) && $blockType['set']) {
+                $navigationBlockTypeSet = BlockTypeSet::getByHandle('navigation');
+                if ($navigationBlockTypeSet) {
+                    $navigationBlockTypeSet->addBlockType(BlockType::getByHandle($blockType['handle']));
+                }
+            }
+        }
 	}
 }
 ?>
