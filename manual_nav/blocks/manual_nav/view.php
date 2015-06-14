@@ -4,6 +4,13 @@ $c = Page::getCurrentPage();
 
     <?php if (count($rows) > 0) {
 	$rows[0]['class'] = "nav-first";
+        foreach($rows as &$rowp)
+	{	
+	    if($rowp['internalLinkCID'] === $c->getCollectionID())
+	    {
+		$rowp['class'] .= " nav-selected";
+	    }
+	}
     ?>
     <ul class="nav">
     <?php foreach ($rows as $row) { ?>
