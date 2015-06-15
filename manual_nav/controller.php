@@ -33,7 +33,7 @@ class Controller extends Package
 	public function install()
 	{
 		$pkg = parent::install();
-		foreach (Self::$blockTypes as $blockType) {
+		foreach (self::$blockTypes as $blockType) {
             $existingBlockType = BlockType::getByHandle($blockType['handle']);
             if (!$existingBlockType) {
                 BlockType::installBlockTypeFromPackage($blockType['handle'], $pkg);
