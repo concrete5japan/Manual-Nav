@@ -9,11 +9,11 @@ http://www.concrete5.org/marketplace/addons/manual-nav/
 - Ability to add external URL manually
 - You must enter a link text if you choose the external URL
 - Ability to arrange the order of the menu
-- Print out simple `<ul><li>
+- Print out simple `<ul><li>`
 
 You will need to modify the CSS in order to make it look like a manual nav.
 
-## What is the main goal
+## Why Manual Nav?
 
 Auto Nav block of concrete5 is great.
 
@@ -36,7 +36,7 @@ We copied the Image Slider block and convert it to this Manual Nav.
 - If you chose the external URL, you must enter the link text.
 - If you didn't enter the link text, the page title will be used.
 
-## Pull Requests and Feature Requests are welcomed.
+## Welcoming Pull Requests and Feature Requests
 
 Please send your pull request and feature request to improve this add-on to our GitHub repo.
 https://github.com/concrete5japan/Manual-Nav
@@ -44,6 +44,11 @@ https://github.com/concrete5japan/Manual-Nav
 ## License
 
 Manual Nav is licensed under MIT license. Please see the license.txt inside of manual_nav folder for the detail.
+
+## Credit
+
+- @katzueno (PM and document)
+- @acliss19xx (Develop)
 
 ## Acknowledge
 
@@ -79,6 +84,12 @@ CSS で表示の調整をして頂く必要があります。
 ## ライセンス
 
 Manual Nav は MIT ライセンスで配布しています。詳しくは manual_nav フォルダ内の license.txt をご覧ください。
+
+## クレジット
+
+- @katzueno (企画・ドキュメント)
+- @acliss19xx (開発)
+
 
 ## プルリクエストや機能要望を募集します。
 
