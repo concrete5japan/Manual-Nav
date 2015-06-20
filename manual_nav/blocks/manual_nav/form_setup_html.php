@@ -151,7 +151,7 @@ $tp = new TaskPermission();
     }
 </style>
 <div class="ccm-manual-nav-block-container">
-    <span class="btn btn-success ccm-add-manual-nav-entry"><?php echo t('Add Entry') ?></span>
+    <span class="btn btn-success ccm-add-manual-nav-entry"><?php echo t('Add Link') ?></span>
     <div class="ccm-manual-nav-entries">
 
     </div>
@@ -186,7 +186,7 @@ $tp = new TaskPermission();
 
         <input class="ccm-manual-nav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder')?>[]" value="<%=sort_order%>"/>
         <div class="form-group">
-            <span class="btn btn-danger ccm-delete-manual-nav-entry"><?php echo t('Delete Entry'); ?></span>
+            <span class="btn btn-danger ccm-delete-manual-nav-entry"><?php echo t('Delete Link'); ?></span>
         </div>
     </div>
 </script>
