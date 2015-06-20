@@ -2,7 +2,7 @@
 namespace Concrete\Package\ManualNav\Block\ManualNav;
 
 use Concrete\Core\Block\BlockController;
-use Loader;
+use Database;
 use Page;
 
 class Controller extends BlockController
@@ -32,7 +32,7 @@ class Controller extends BlockController
     public function getSearchableContent()
     {
         $content = '';
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $v = array($this->bID);
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
@@ -50,14 +50,14 @@ class Controller extends BlockController
     public function edit()
     {
         $this->requireAsset('core/sitemap');
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $query = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $this->set('rows', $query);
     }
 
     public function view()
     {
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $r = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         // in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
         $rows = array();
@@ -74,7 +74,7 @@ class Controller extends BlockController
 
     public function duplicate($newBID) {
         parent::duplicate($newBID);
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $v = array($this->bID);
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
@@ -92,14 +92,14 @@ class Controller extends BlockController
 
     public function delete()
     {
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $db->delete('btManualNavEntries', array('bID' => $this->bID));
         parent::delete();
     }
 
     public function save($args)
     {
-        $db = Loader::db();
+        $db = Database::getActiveConnection();
         $db->execute('DELETE from btManualNavEntries WHERE bID = ?', array($this->bID));
         $count = count($args['sortOrder']);
         $i = 0;
