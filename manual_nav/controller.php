@@ -39,7 +39,7 @@ class Controller extends Package
                 BlockType::installBlockTypeFromPackage($blockType['handle'], $pkg);
             }
             if (isset($blockType['set']) && $blockType['set']) {
-                $navigationBlockTypeSet = BlockTypeSet::getByHandle('navigation');
+                $navigationBlockTypeSet = BlockTypeSet::getByHandle($blockType['set']);
                 if ($navigationBlockTypeSet) {
                     $navigationBlockTypeSet->addBlockType(BlockType::getByHandle($blockType['handle']));
                 }
