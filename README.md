@@ -11,7 +11,7 @@ http://www.concrete5.org/marketplace/addons/manual-nav/
 - Ability to arrange the order of the menu
 - Print out simple `<ul><li>`
 
-You will need to modify the CSS in order to make it look like a manual nav.
+You will need to modify the CSS in order to make it look like a navigation.
 
 ## Why Manual Nav?
 
