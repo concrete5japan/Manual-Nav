@@ -14,7 +14,7 @@ $c = Page::getCurrentPage();
     ?>
     <ul class="nav">
     <?php foreach ($rows as $row) { ?>
-	    <li class="<?php echo $row['class']?>">
+	    <li class="<?php echo $row['class']?><?php if($row['internalLinkCID'] !== 0 && $row['internalLinkCID'] == $c->getCollectionID()): echo ' isCurrent'; endif;?>">
 		<a href="<?php echo $row['linkURL'] ?>"><?php echo $row['title'] != null ? h($row['title']) : h($row['collectionName']); ?></a>
 	    </li>
     <?php } ?>
