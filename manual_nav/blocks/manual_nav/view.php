@@ -14,10 +14,19 @@ $c = Page::getCurrentPage();
     ?>
     <ul class="nav">
     <?php foreach ($rows as $row) { ?>
-	    <li class="<?php echo $row['class']?>">
-		<a href="<?php echo $row['linkURL'] ?>"><?php echo $row['title'] != null ? h($row['title']) : h($row['collectionName']); ?></a>
-	    </li>
-    <?php } ?>
+        <li class="<?php echo $row['class']?>">
+            <a href="<?php echo $row['linkURL'] ?>">
+            <?php
+            if($row['title'] != null){
+                echo h($row['title']);
+            }elseif($row['collectionName'] != null){
+                echo h($row['collectionName']);
+            }else{
+                echo t('(Untitled)');
+            }
+            ?>
+            </a>
+	</li>    <?php } ?>
     </ul>
 <?php } else { ?>
     <div class="ccm-manual-nav-placeholder">
