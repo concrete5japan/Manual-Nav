@@ -22,7 +22,7 @@ class Controller extends Package
 
 	public function getPackageDescription()
 	{
-		return t("Manual Nav");
+		return t("Manual Nav let you create navigation whatever you would like manually. It's concrete5.7 version of Jordan Lev's famous Manual Nav but developed independently by acliss19xx from concrete5 Japan community.");
 	}
 
 	public function getPackageName()
