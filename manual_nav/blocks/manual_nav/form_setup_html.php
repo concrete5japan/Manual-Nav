@@ -62,6 +62,13 @@ $tp = new TaskPermission();
 	    $('.ccm-manualnav-entry').each(function (index) {
 			$(this).find('.ccm-manualnav-entry-sort').val(index);
 	    });
+		ei = $('[name=displayImage]').val()
+		if(ei == 0 || ei == 1){
+			$('.set-here-image').hide();
+		}else{
+			$('.set-here-image').show();
+		}
+
     };
     
 	manualnavEntriesContainer.on('change', 'select[data-field=entry-link-select]', function () {
