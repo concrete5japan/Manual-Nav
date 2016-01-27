@@ -236,7 +236,7 @@ if ($rows) {
 							<i class="fa fa-picture-o"></i>
 						<% } %>
 					</div>
-					<input type="hidden" name="<?= $view->field('fID') ?>[]" class="image-fID" value="<%=fID%>" />
+					<input type="hidden" name="<?php echo $view->field('fID') ?>[]" class="image-fID" value="<%=fID%>" />
 				</div>
 			</div>
 			<div class="col-md-9">
