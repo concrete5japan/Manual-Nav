@@ -15,7 +15,7 @@ if (count($rows) > 0) {
 	<ul class="nav">
 		<?php foreach ($rows as $row) { ?>
 			<?php
-			// view title
+			// create title
 			$title = null;
 			if ($row['title'] != null) {
 				$title = $row['title'];
@@ -24,15 +24,25 @@ if (count($rows) > 0) {
 			} else {
 				$title = t('(Untitled)');
 			}
+            
+            $tag = "";
+            if($displayImage != 0) {
+                if (is_object($row['image'])) {
+                    $im = Core::make('helper/image');
+                    $thumb = $im->getThumbnail($row['image'],100,100);
+                    $tag = new \HtmlObject\Image();
+                    $tag->src($thumb->src)->width($thumb->width)->height($thumb->height);
+                    $tag->alt(h($title));
+                }
+            }
+            
 			?>
 
 			<li class="<?php echo $row['class'] ?>">
 
 				<a href="<?php echo $row['linkURL'] ?>">
-					<?php if (is_object($row['image'])) { ?>
-						<img src="<?php echo $row['image']->getRelativePath() ?>" />
-					<?php } ?>
-		<?php echo h($title); ?>
+                    <?php echo $tag ?>
+            		<?php echo h($title); ?>
 				</a>
 			</li>
 	<?php } ?>
