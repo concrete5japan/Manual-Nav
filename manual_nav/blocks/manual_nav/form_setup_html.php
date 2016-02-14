@@ -5,11 +5,11 @@ $fp = FilePermissions::getGlobal();
 $tp = new TaskPermission();
 ?>
 <div class="form-group">
-    <label><?php echo t('画像を含める') ?></label>
+    <label><?php echo t('Include Image.') ?></label>
     <select data-field="entry-image-select" name="displayImage" class="form-control" style="width: 60%;">
-        <option value="0" <?php echo $displayImage == 0 ? 'selected' : '' ?>><?php echo t('画像なし') ?></option>
-        <option value="1" <?php echo $displayImage == 1 ? 'selected' : '' ?>><?php echo t('thumbnail属性を使う') ?></option>
-        <option value="2" <?php echo $displayImage == 2 ? 'selected' : '' ?>><?php echo t('ここで設定する') ?></option>
+        <option value="0" <?php echo $displayImage == 0 ? 'selected' : '' ?>><?php echo t('Image None') ?></option>
+        <option value="1" <?php echo $displayImage == 1 ? 'selected' : '' ?>><?php echo t('Use page attribute. Handle name is thumbnail') ?></option>
+        <option value="2" <?php echo $displayImage == 2 ? 'selected' : '' ?>><?php echo t('Image setting here') ?></option>
     </select>
 </div>
 <script>
