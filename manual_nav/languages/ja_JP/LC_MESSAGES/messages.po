@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: manual-nav\n"
+"POT-Creation-Date: 2016-02-14 09:04+0900\n"
+"PO-Revision-Date: 2016-02-18 21:48+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;t\n"
+"X-Poedit-Basepath: /home/concrete5/git/c5j/\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Language: ja_JP\n"
+"X-Poedit-SearchPath-0: Manual-Nav\n"
+
+#: Manual-Nav/manual_nav/controller.php:24
+msgid ""
+"Manual Nav let you create navigation whatever you would like manually. It's "
+"concrete5.7 version of Jordan Lev's famous Manual Nav but developed "
+"independently by acliss19xx from concrete5 Japan community."
+msgstr ""
+
+#: Manual-Nav/manual_nav/controller.php:28
+#: Manual-Nav/manual_nav/blocks/manual_nav/controller.php:28
+msgid "Manual Nav"
+msgstr "マニュアルナビ"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/controller.php:24
+msgid "Manual Nav."
+msgstr "マニュアルナビ。"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:8
+msgid "Include Image."
+msgstr "画像を含める"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:10
+msgid "Image None"
+msgstr "画像なし"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:11
+msgid "Use page attribute. Handle name is thumbnail"
+msgstr "thumbnailページ属性を使う"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:12
+msgid "Image setting here"
+msgstr "ここで設定する"
