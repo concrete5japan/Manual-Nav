@@ -49,6 +49,7 @@ Manual Nav is licensed under MIT license. Please see the license.txt inside of m
 
 - @katzueno (PM and document)
 - @acliss19xx (Develop)
+- Tomoaki Watanabe (Icon Design)
 
 ## Acknowledge
 
@@ -89,6 +90,7 @@ Manual Nav は MIT ライセンスで配布しています。詳しくは manual
 
 - @katzueno (企画・ドキュメント)
 - @acliss19xx (開発)
+- Tomoaki Watanabe【株式会社富士印刷】(アイコンデザイン)
 
 
 ## プルリクエストや機能要望を募集します。
