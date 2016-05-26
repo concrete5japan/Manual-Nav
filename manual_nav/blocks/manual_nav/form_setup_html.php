@@ -215,15 +215,18 @@ if ($rows) {
     }
 </style>
 <div class="ccm-manualnav-block-container">
-    <span class="btn btn-success ccm-add-manualnav-entry"><?php echo t('Add Link') ?></span>
     <div class="ccm-manualnav-entries">
 
     </div>
+    <span class="btn btn-success ccm-add-manualnav-entry"><?php echo t('Add Link') ?></span>
 </div>
 <script type="text/template" id="imageTemplate">
 <div class="ccm-manualnav-entry well">
     <i class="fa fa-sort-desc"></i>
     <i class="fa fa-sort-asc"></i>
+    <div class="form-group">
+        <span class="btn btn-danger ccm-delete-manualnav-entry"><?php echo t('Delete Link'); ?></span>
+    </div>
     <div class="row">
         <div class="col-md-3">
             <div class="form-group set-here-image">
@@ -268,9 +271,6 @@ if ($rows) {
                 </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <span class="btn btn-danger ccm-delete-manualnav-entry"><?php echo t('Delete Link'); ?></span>
     </div>
 </div>
 </script>
