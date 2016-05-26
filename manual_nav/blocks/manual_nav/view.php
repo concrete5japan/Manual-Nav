@@ -39,7 +39,7 @@ if (count($rows) > 0) {
 
             <li class="<?php echo $row['class'] ?>">
 
-                <a href="<?php echo $row['linkURL'] ?>">
+                <a href="<?php echo $row['linkURL'] ?>" <?php echo $row['openInNewWindow']  ?  'target="_blank"' : '' ?>>
                     <?php echo $tag ?>
                     <?php echo h($title); ?>
                 </a>

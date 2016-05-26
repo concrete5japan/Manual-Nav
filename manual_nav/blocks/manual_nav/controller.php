@@ -88,14 +88,15 @@ class Controller extends BlockController {
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         while ($row = $r->FetchRow()) {
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, linkURL, title, sortOrder, internalLinkCID) values(?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?)', array(
                 $newBID,
                 $row['fID'],
                 $row['linkURL'],
                 $row['title'],
                 $row['sortOrder'],
-                $row['internalLinkCID']
-                    )
+                $row['internalLinkCID'],
+                $row['openInNewWindow']
+                )
             );
         }
     }
@@ -131,13 +132,17 @@ class Controller extends BlockController {
             if ($args['fID'][$i] == null) {
                 $args['fID'][$i] = 0;
             }
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, title, sortOrder, linkURL, internalLinkCID) values(?,?,?,?,?,?)', array(
+            
+            $openInNewWindow =  $args['openInNewWindow'][$i] == null ? 0 : 1;
+
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?)', array(
                 $this->bID,
                 $args['fID'][$i],
                 $args['title'][$i],
                 $args['sortOrder'][$i],
                 $linkURL,
-                $internalLinkCID
+                $internalLinkCID,
+                $openInNewWindow
                     )
             );
             $i++;

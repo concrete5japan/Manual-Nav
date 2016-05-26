@@ -77,14 +77,17 @@ $tp = new TaskPermission();
                 case 2:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').show();
+                    container.find('div[data-field=entry-link-blank-window]').show();
                     break;
                 case 1:
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-page-selector]').show();
+                    container.find('div[data-field=entry-link-blank-window]').show();
                     break;
                 default:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').hide();
+                    container.find('div[data-field=entry-link-blank-window]').hide();
                     break;
             }
         });
@@ -108,7 +111,8 @@ if ($rows) {
                 link_url: '<?php echo $row['linkURL'] ?>',
                         link_type: '<?php echo $linkType ?>',
                         title: '<?php echo addslashes($row['title']) ?>',
-                        sort_order: '<?php echo $row['sortOrder'] ?>'
+                        sort_order: '<?php echo $row['sortOrder'] ?>',
+                        openInNewWindow : '<?php echo $row['openInNewWindow']?>'
                 }));
                         manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($row['internalLinkCID']) ?><?php } else { ?>false<?php } ?>
@@ -129,7 +133,8 @@ if ($rows) {
                             cID: '',
                             link_type: 0,
                             sort_order: '',
-                            image_url: ''
+                            image_url: '',
+                            openInNewWindow: 0
                         }));
 
                         var newSlide = $('.ccm-manualnav-entry').last();
@@ -269,6 +274,12 @@ if ($rows) {
                     </div>
                     <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
                 </div>
+            </div>
+
+            <div class="checkbox" style="display: none;" data-field="entry-link-blank-window" class="form-group">
+                <label><input type="checkbox" <% if(openInNewWindow==1){ %>checked <% } %> name="openInNewWindow[<%=sort_order%>]" value="1"  />
+                    <?php echo t('Open Link in New Window')?>
+                </label>
             </div>
         </div>
     </div>
