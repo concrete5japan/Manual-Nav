@@ -28,11 +28,18 @@ if (count($rows) > 0) {
             $tag = "";
             if ($displayImage != 0) {
                 if (is_object($row['image'])) {
-                    $im = Core::make('helper/image');
-                    $thumb = $im->getThumbnail($row['image'], 100, 100);
-                    $tag = new \HtmlObject\Image();
-                    $tag->src($thumb->src)->width($thumb->width)->height($thumb->height);
-                    $tag->alt(h($title));
+
+                    if(in_array(end(explode('.', $row['image']->getFilename())),array('svg'))){
+//                        $image = Core::make('html/image', array($row['image']));
+//                        $tag = $image->getTag();
+                        $tag = '<img src="' . $row['image']->getURL() . '" width="100px" height="100px">';
+                    } else {
+                        $im = Core::make('helper/image');
+                        $thumb = $im->getThumbnail($row['image'], 100, 100);
+                        $tag = new \HtmlObject\Image();
+                        $tag->src($thumb->src)->width($thumb->width)->height($thumb->height);
+                        $tag->alt(h($title));
+                    }
                 }
             }
             ?>
