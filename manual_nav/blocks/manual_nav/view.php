@@ -24,12 +24,12 @@ if (count($rows) > 0) {
             } else {
                 $title = t('(Untitled)');
             }
-
+            
             $tag = "";
             if ($displayImage != 0) {
                 if (is_object($row['image'])) {
 
-                    if(in_array(end(explode('.', $row['image']->getFilename())),array('svg'))){
+                    if($row['isVectorImage']){
 //                        $image = Core::make('html/image', array($row['image']));
 //                        $tag = $image->getTag();
                         $tag = '<img src="' . $row['image']->getURL() . '" width="100px" height="100px">';
