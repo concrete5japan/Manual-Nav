@@ -10,3 +10,7 @@ update package discription
 
 2.0.0
 update It was to be able to add an image .
+
+2.1.0
+fix svg file error.
+"Add Link" button was moved to bottom.
