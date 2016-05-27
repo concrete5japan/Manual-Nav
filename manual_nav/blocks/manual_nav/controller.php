@@ -80,7 +80,7 @@ class Controller extends BlockController {
             if($this->displayImage){
                 $f = Core::make('helper/file');
                 $ex = array('svg');
-                $q['isVectorImage'] = in_array(Core::make('helper/file')->getExtension(File::getByID($q['fID'])->getFilename()),$ex,true);
+                $q['isVectorImage'] = in_array(strtolower(Core::make('helper/file')->getExtension(File::getByID($q['fID'])->getFilename())),$ex,true);
             }else{
                 $q['isVectorImage'] = false;
             }
