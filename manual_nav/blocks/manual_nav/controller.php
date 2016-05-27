@@ -6,6 +6,7 @@ use Concrete\Core\Block\BlockController;
 use Database;
 use Page;
 use File;
+use Core;
 
 class Controller extends BlockController {
 
@@ -75,7 +76,15 @@ class Controller extends BlockController {
             } else if ($this->displayImage == 2) {
                 $q['image'] = File::getByID($q['fID']);
             }
-
+            
+            if($this->displayImage){
+                $f = Core::make('helper/file');
+                $ex = array('svg');
+                $q['isVectorImage'] = in_array(Core::make('helper/file')->getExtension(File::getByID($q['fID'])->getFilename()),$ex,true);
+            }else{
+                $q['isVectorImage'] = false;
+            }
+            
             $rows[] = $q;
         }
         $this->set('rows', $rows);

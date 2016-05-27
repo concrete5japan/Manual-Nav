@@ -38,10 +38,10 @@
         </field>
         <field name="title" type="X2"></field>
         <field name="sortOrder" type="I"></field>
-        <field name="openInNewWindow" type="boolean">
-          <unsigned/>
-          <default value="0"/>
-          <notnull/>
+        <field name="openInNewWindow" type="L">
+            <unsigned/>
+            <default value="0"/>
+            <notnull/>
         </field>
     </table>
 </schema>
