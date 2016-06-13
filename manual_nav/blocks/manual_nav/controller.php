@@ -77,12 +77,13 @@ class Controller extends BlockController {
                 $q['image'] = File::getByID($q['fID']);
             }
             
+            $q['isVerctorImage'] = false;
             if($this->displayImage){
                 $f = Core::make('helper/file');
                 $ex = array('svg');
-                $q['isVectorImage'] = in_array(strtolower(Core::make('helper/file')->getExtension(File::getByID($q['fID'])->getFilename())),$ex,true);
-            }else{
-                $q['isVectorImage'] = false;
+                if(is_object($q['image'])){
+                    $q['isVectorImage'] = in_array(strtolower(Core::make('helper/file')->getExtension($q['image']->getFilename())),$ex,true);
+                }
             }
             
             $rows[] = $q;
