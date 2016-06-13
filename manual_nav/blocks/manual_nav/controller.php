@@ -77,7 +77,7 @@ class Controller extends BlockController {
                 $q['image'] = File::getByID($q['fID']);
             }
             
-            $q['isVerctorImage'] = false;
+            $q['isVectorImage'] = false;
             if($this->displayImage){
                 $f = Core::make('helper/file');
                 $ex = array('svg');
