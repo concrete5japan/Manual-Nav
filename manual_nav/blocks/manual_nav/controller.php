@@ -66,6 +66,7 @@ class Controller extends BlockController {
                 $c = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 $q['linkURL'] = $c->getCollectionLink();
                 $q['collectionName'] = $c->getCollectionName();
+                $q['collectionDescription'] = $c->getCollectionDescription();
             }
             //image type
             if ($this->displayImage == 1) {
