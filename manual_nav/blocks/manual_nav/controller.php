@@ -64,7 +64,7 @@ class Controller extends BlockController {
         foreach ($r as $q) {
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
-                $q['linkURL'] =  $lc->getCollectionLink();
+                $q['linkURL'] =  ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
                 $q['collectionName'] = $lc->getCollectionName();
             }
             //image type
