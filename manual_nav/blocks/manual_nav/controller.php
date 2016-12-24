@@ -63,15 +63,15 @@ class Controller extends BlockController {
         $rows = array();
         foreach ($r as $q) {
             if (!$q['linkURL'] && $q['internalLinkCID']) {
-                $c = Page::getByID($q['internalLinkCID'], 'ACTIVE');
-                $q['linkURL'] = $c->getCollectionLink();
-                $q['collectionName'] = $c->getCollectionName();
+                $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
+                $q['linkURL'] =  $lc->getCollectionLink();
+                $q['collectionName'] = $lc->getCollectionName();
             }
             //image type
             if ($this->displayImage == 1) {
-                $c = Page::getByID($q['internalLinkCID'], 'ACTIVE');
-                if (is_object($c)) {
-                    $q['image'] = $c->getAttribute('thumbnail');
+                $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
+                if (is_object($lc)) {
+                    $q['image'] = $lc->getAttribute('thumbnail');
                 }
             } else if ($this->displayImage == 2) {
                 $q['image'] = File::getByID($q['fID']);
