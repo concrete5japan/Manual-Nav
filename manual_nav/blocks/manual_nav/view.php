@@ -26,7 +26,7 @@ if (count($rows) > 0) {
             }
             
             $tag = "";
-            if ($displayImage != 0) {
+            if ($displayImage >= 1 && $displayImage <= 2) {
                 if (is_object($row['image'])) {
 
                     if($row['isVectorImage']){
@@ -41,13 +41,15 @@ if (count($rows) > 0) {
                         $tag->alt(h($title));
                     }
                 }
-            }
-            ?>
+            }elseif($displayImage == 3){
+                $icon = '<i class="fa fa-' .  $row['icon'] . '"></i>';
+            } ?>
 
             <li class="<?php echo $row['class'] ?>">
 
                 <a href="<?php echo $row['linkURL'] ?>" <?php echo $row['openInNewWindow']  ?  'target="_blank"' : '' ?>>
                     <?php echo $tag ?>
+                    <?php echo $icon ?>
                     <?php echo h($title); ?>
                 </a>
             </li>

@@ -7,6 +7,8 @@ use Database;
 use Page;
 use File;
 use Core;
+use Less_Parser;
+use Less_Tree_Rule;
 
 class Controller extends BlockController {
 
@@ -45,6 +47,15 @@ class Controller extends BlockController {
         $this->requireAsset('core/file-manager');
         $this->requireAsset('core/sitemap');
         $this->requireAsset('redactor');
+
+        $this->requireAsset('css', 'font-awesome');
+        $classes = $this->getIconClasses();
+        $icons = array('' => t('Choose Icon'));
+        $txt = Core::make('helper/text');
+        foreach ($classes as $class) {
+            $icons[$class] = $txt->unhandle($class);
+        }
+        $this->set('icons', $icons);
     }
 
     public function edit() {
@@ -54,6 +65,37 @@ class Controller extends BlockController {
         $db = Database::getActiveConnection();
         $query = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $this->set('rows', $query);
+
+        $this->requireAsset('css', 'font-awesome');
+        $classes = $this->getIconClasses();
+        $icons = array('' => t('Choose Icon'));
+        $txt = Core::make('helper/text');
+        foreach ($classes as $class) {
+            $icons[$class] = $txt->unhandle($class);
+        }
+        $this->set('icons', $icons);
+    }
+
+    protected function getIconClasses()
+    {
+        $iconLessFile = DIR_BASE_CORE . '/css/build/vendor/font-awesome/variables.less';
+        $icons = array();
+
+        $l = new Less_Parser();
+        $parser = $l->parseFile($iconLessFile, false, true);
+        $rules = $parser->rules;
+
+        foreach ($rules as $rule) {
+            if ($rule instanceof Less_Tree_Rule) {
+                if (strpos($rule->name, '@fa-var') === 0) {
+                    $name = str_replace('@fa-var-', '', $rule->name);
+                    $icons[] = $name;
+                }
+            }
+        }
+        asort($icons);
+
+        return $icons;
     }
 
     public function view() {
@@ -98,9 +140,10 @@ class Controller extends BlockController {
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         while ($row = $r->FetchRow()) {
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
                 $newBID,
                 $row['fID'],
+                $row['icon'],
                 $row['linkURL'],
                 $row['title'],
                 $row['sortOrder'],
@@ -123,7 +166,6 @@ class Controller extends BlockController {
         $count = count($args['sortOrder']);
         $i = 0;
         parent::save($args);
-
         while ($i < $count) {
             $linkURL = $args['linkURL'][$i];
             $internalLinkCID = $args['internalLinkCID'][$i];
@@ -145,9 +187,10 @@ class Controller extends BlockController {
             
             $openInNewWindow =  $args['openInNewWindow'][$i] == null ? 0 : 1;
 
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
                 $this->bID,
                 $args['fID'][$i],
+                $args['icon'][$i],
                 $args['title'][$i],
                 $args['sortOrder'][$i],
                 $linkURL,

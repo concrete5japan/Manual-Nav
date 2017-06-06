@@ -10,14 +10,17 @@ $tp = new TaskPermission();
         <option value="0" <?php echo $displayImage == 0 ? 'selected' : '' ?>><?php echo t('Image None') ?></option>
         <option value="1" <?php echo $displayImage == 1 ? 'selected' : '' ?>><?php echo t('Use page attribute. Handle name is thumbnail') ?></option>
         <option value="2" <?php echo $displayImage == 2 ? 'selected' : '' ?>><?php echo t('Image setting here') ?></option>
+        <option value="3" <?php echo $displayImage == 3 ? 'selected' : '' ?>><?php echo t('icon') ?></option>
     </select>
 </div>
 <script>
     var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Loader::helper('validation/token')->generate('editor') ?>";
     $(document).ready(function () {
+
         var ccmReceivingEntry = '';
         var manualnavEntriesContainer = $('.ccm-manualnav-entries');
         var _templateSlide = _.template($('#imageTemplate').html());
+
         var attachDelete = function ($obj) {
             $obj.click(function () {
                 var deleteIt = confirm('<?php echo t('Are you sure?') ?>');
@@ -65,8 +68,13 @@ $tp = new TaskPermission();
             ei = $('[name=displayImage]').val()
             if (ei == 0 || ei == 1) {
                 $('.set-here-image').hide();
-            } else {
+                $('.ccm-block-manualnav-select-icon').hide();
+            } else if (ei == 2){
                 $('.set-here-image').show();
+                $('.ccm-block-manualnav-select-icon').hide();
+            } else if (ei == 3){
+                $('.set-here-image').hide();
+                $('.ccm-block-manualnav-select-icon').show();
             }
 
         };
@@ -102,17 +110,19 @@ if ($rows) {
         }
         ?>
                 manualnavEntriesContainer.append(_templateSlide({
-                fID: '<?php echo $row['fID'] ?>',
+                    fID: '<?php echo $row['fID'] ?>',
         <?php if (File::getByID($row['fID'])) { ?>
                     image_url: '<?php echo File::getByID($row['fID'])->getThumbnailURL('file_manager_listing'); ?>',
         <?php } else { ?>
                     image_url: '',
         <?php } ?>
-                link_url: '<?php echo $row['linkURL'] ?>',
-                        link_type: '<?php echo $linkType ?>',
-                        title: '<?php echo addslashes($row['title']) ?>',
-                        sort_order: '<?php echo $row['sortOrder'] ?>',
-                        openInNewWindow : '<?php echo $row['openInNewWindow']?>'
+                    icon: '<?php echo $row['icon']?>',
+                    icons: <?php echo json_encode($icons) ?>,
+                    link_url: '<?php echo $row['linkURL'] ?>',
+                    link_type: '<?php echo $linkType ?>',
+                    title: '<?php echo addslashes($row['title']) ?>',
+                    sort_order: '<?php echo $row['sortOrder'] ?>',
+                    openInNewWindow : '<?php echo $row['openInNewWindow']?>'
                 }));
                         manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($row['internalLinkCID']) ?><?php } else { ?>false<?php } ?>
@@ -130,6 +140,8 @@ if ($rows) {
                             fID: '',
                             title: '',
                             link_url: '',
+                            icon: '',
+                            icons: <?php echo json_encode($icons) ?>,
                             cID: '',
                             link_type: 0,
                             sort_order: '',
@@ -154,8 +166,13 @@ if ($rows) {
                         ei = $(this).val()
                         if (ei == 0 || ei == 1) {
                             $('.set-here-image').hide();
-                        } else {
+                            $('.ccm-block-manualnav-select-icon').hide();
+                        } else if (ei == 2){
                             $('.set-here-image').show();
+                            $('.ccm-block-manualnav-select-icon').hide();
+                        } else if (ei == 3){
+                            $('.set-here-image').hide();
+                            $('.ccm-block-manualnav-select-icon').show();
                         }
                     });
                     attachDelete($('.ccm-delete-manualnav-entry'));
@@ -163,6 +180,13 @@ if ($rows) {
                     attachSortDesc($('i.fa-sort-desc'));
                     attachFileManagerLaunch($('.ccm-pick-manualnav-image'));
                 });
+
+                var iconPreview = function(obj){
+                    $(obj).next().removeClass();
+                    if($(obj).val()) {
+                        $(obj).next().addClass('fa fa-' + $(obj).val());
+                    }
+                }
 </script>
 <style>
 
@@ -244,6 +268,14 @@ if ($rows) {
                     <% } %>
                 </div>
                 <input type="hidden" name="<?php echo $view->field('fID') ?>[]" class="image-fID" value="<%=fID%>" />
+            </div>
+            <div class="form-group ccm-block-manualnav-select-icon" style="margin-right: 5px;">
+                <select id="icon2" name="<?php echo $view->field('icon') . '[]'?>" class="form-control" onchange="iconPreview(this)">
+                    <% _.each(icons,function(val,key){ %>
+                        <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
+                    <% }); %>
+                </select>
+                <i data-preview="icon" <?php if ($row['icon']) { ?>class="fa fa-<%=icon%>"<?php } ?>></i>
             </div>
         </div>
         <div class="col-md-9">
