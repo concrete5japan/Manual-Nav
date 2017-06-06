@@ -27,7 +27,7 @@
             <unsigned/>
             <default value="0"/>
         </field>
-        <field name="icon" type="string" size="255"/>
+        <field name="icon" type="C" size="255"/>
         <field name="cID" type="I">
             <UNSIGNED />
             <default value="0" />
