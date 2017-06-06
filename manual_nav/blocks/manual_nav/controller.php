@@ -62,6 +62,8 @@ class Controller extends BlockController {
         $this->requireAsset('core/sitemap');
         $this->requireAsset('core/file-manager');
         $this->requireAsset('redactor');
+
+        $this->requireAsset('css', 'font-awesome');
         $db = Database::getActiveConnection();
         $query = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         $this->set('rows', $query);
