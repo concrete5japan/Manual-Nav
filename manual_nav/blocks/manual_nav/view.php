@@ -42,7 +42,7 @@ if (count($rows) > 0) {
                     }
                 }
             }elseif($displayImage == 3){
-                $icon = '<i class="fa fa-' .  $row['icon'] . '"></i>';
+                $icon = '<i class="fa fa-' .  $row['icon'] . '" area-hidden="true"></i>';
             } ?>
 
             <li class="<?php echo $row['class'] ?>">
