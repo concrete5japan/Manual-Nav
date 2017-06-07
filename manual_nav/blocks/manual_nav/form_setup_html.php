@@ -275,7 +275,7 @@ if ($rows) {
                         <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
                     <% }); %>
                 </select>
-                <i data-preview="icon" <?php if ($row['icon']) { ?>class="fa fa-<%=icon%>"<?php } ?>></i>
+                <i data-preview="icon" <%if(icon) { %>class="fa fa-<%=icon%>"<% } %>></i>
             </div>
         </div>
         <div class="col-md-9">
