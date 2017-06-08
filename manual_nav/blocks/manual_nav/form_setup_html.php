@@ -10,7 +10,7 @@ $tp = new TaskPermission();
         <option value="0" <?php echo $displayImage == 0 ? 'selected' : '' ?>><?php echo t('Image None') ?></option>
         <option value="1" <?php echo $displayImage == 1 ? 'selected' : '' ?>><?php echo t('Use page attribute. Handle name is thumbnail') ?></option>
         <option value="2" <?php echo $displayImage == 2 ? 'selected' : '' ?>><?php echo t('Image setting here') ?></option>
-        <option value="3" <?php echo $displayImage == 3 ? 'selected' : '' ?>><?php echo t('icon') ?></option>
+        <option value="3" <?php echo $displayImage == 3 ? 'selected' : '' ?>><?php echo t('Use font awesome icon') ?></option>
     </select>
 </div>
 <script>

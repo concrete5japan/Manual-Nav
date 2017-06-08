@@ -47,3 +47,7 @@ msgstr "thumbnailページ属性を使う"
 #: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:12
 msgid "Image setting here"
 msgstr "ここで設定する"
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:13
+msgid "Use font awesome icon"
+msgstr "font awesome アイコンを使う"

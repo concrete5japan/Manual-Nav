@@ -46,3 +46,7 @@ msgstr ""
 #: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:12
 msgid "Image setting here"
 msgstr ""
+
+#: Manual-Nav/manual_nav/blocks/manual_nav/form_setup_html.php:13
+msgid "Use font awesome icon"
+msgstr ""
