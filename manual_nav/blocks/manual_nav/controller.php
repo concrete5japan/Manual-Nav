@@ -56,6 +56,18 @@ class Controller extends BlockController {
             $icons[$class] = $txt->unhandle($class);
         }
         $this->set('icons', $icons);
+
+        $c = \Page::getCurrentPage();
+        $areaBlocks = $c->getBlocks();
+        $anchorIDs = [];
+        foreach($areaBlocks as $index => $ab){
+            if($ab->getCustomStyle(true)->getStyleSet() instanceof \Concrete\Core\Entity\StyleCustomizer\Inline\StyleSet){
+                if($ab->getCustomStyle(true)->getStyleSet()->getCustomID()){
+                    $anchorIDs[] = $ab->getCustomStyle(true)->getStyleSet()->getCustomID();
+                }
+            }
+        }
+        $this->set('anchorIDs',$anchorIDs);
     }
 
     public function edit() {
@@ -76,6 +88,18 @@ class Controller extends BlockController {
             $icons[$class] = $txt->unhandle($class);
         }
         $this->set('icons', $icons);
+
+        $c = \Page::getCurrentPage();
+        $areaBlocks = $c->getBlocks();
+        $anchorIDs = [];
+        foreach($areaBlocks as $index => $ab){
+            if($ab->getCustomStyle(true)->getStyleSet() instanceof \Concrete\Core\Entity\StyleCustomizer\Inline\StyleSet){
+                if($ab->getCustomStyle(true)->getStyleSet()->getCustomID()){
+                    $anchorIDs[] = $ab->getCustomStyle(true)->getStyleSet()->getCustomID();
+                }
+            }
+        }
+        $this->set('anchorIDs',$anchorIDs);
     }
 
     protected function getIconClasses()
@@ -100,13 +124,29 @@ class Controller extends BlockController {
         return $icons;
     }
 
+    private function action_getCollectionBlockCustomID(\Page $page){
+        $areaBlocks = $page->getBlocks();
+        $anchorIDs = [];
+        foreach($areaBlocks as $index => $ab){
+            if($ab->getCustomStyle(true)->getStyleSet() instanceof \Concrete\Core\Entity\StyleCustomizer\Inline\StyleSet){
+                if($ab->getCustomStyle(true)->getStyleSet()->getCustomID()){
+                    $anchorIDs[] = $ab->getCustomStyle(true)->getStyleSet()->getCustomID();
+                }
+            }
+        }
+        return $anchorIDs;
+
+    }
+
     public function view() {
         $db = Database::getActiveConnection();
         $r = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
         // in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
         $rows = array();
         foreach ($r as $q) {
-            if (!$q['linkURL'] && $q['internalLinkCID']) {
+            if(!$q['linkURL'] && $q['anchorLinkID']){
+                $q['linkURL'] = '#' . h($q['anchorLinkID']);
+            }else if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 $q['linkURL'] =  ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
                 $q['collectionName'] = $lc->getCollectionName();
@@ -142,7 +182,7 @@ class Controller extends BlockController {
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         while ($row = $r->FetchRow()) {
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, anchorLinkID,openInNewWindow) values(?,?,?,?,?,?,?,?,?)', array(
                 $newBID,
                 $row['fID'],
                 $row['icon'],
@@ -150,6 +190,7 @@ class Controller extends BlockController {
                 $row['title'],
                 $row['sortOrder'],
                 $row['internalLinkCID'],
+                $row['anchorLinkID'],
                 $row['openInNewWindow']
                 )
             );
@@ -171,16 +212,24 @@ class Controller extends BlockController {
         while ($i < $count) {
             $linkURL = $args['linkURL'][$i];
             $internalLinkCID = $args['internalLinkCID'][$i];
+            $anchorLinkID = $args['anchorLinkID'][$i];
             switch (intval($args['linkType'][$i])) {
                 case 1:
                     $linkURL = '';
+                    $anchorLinkID ='';
                     break;
                 case 2:
+                    $internalLinkCID = 0;
+                    $anchorLinkID ='';
+                    break;
+                case 3:
+                    $linkURL = '';
                     $internalLinkCID = 0;
                     break;
                 default:
                     $linkURL = '';
                     $internalLinkCID = 0;
+                    $anchorLinkID ='';
                     break;
             }
             if ($args['fID'][$i] == null) {
@@ -188,8 +237,7 @@ class Controller extends BlockController {
             }
             
             $openInNewWindow =  $args['openInNewWindow'][$i] == null ? 0 : 1;
-
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, anchorLinkID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', array(
                 $this->bID,
                 $args['fID'][$i],
                 $args['icon'][$i],
@@ -197,6 +245,7 @@ class Controller extends BlockController {
                 $args['sortOrder'][$i],
                 $linkURL,
                 $internalLinkCID,
+                $anchorLinkID,
                 $openInNewWindow
                     )
             );

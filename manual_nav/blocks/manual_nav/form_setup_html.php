@@ -1,6 +1,5 @@
 <?php
 defined('C5_EXECUTE') or die("Access Denied.");
-
 $fp = FilePermissions::getGlobal();
 $tp = new TaskPermission();
 ?>
@@ -82,20 +81,29 @@ $tp = new TaskPermission();
         manualnavEntriesContainer.on('change', 'select[data-field=entry-link-select]', function () {
             var container = $(this).closest('.ccm-manualnav-entry');
             switch (parseInt($(this).val())) {
+                case 3:
+                    container.find('div[data-field=entry-link-page-selector]').hide();
+                    container.find('div[data-field=entry-link-url]').hide();
+                    container.find('div[data-field=entry-link-blank-window]').hide();
+                    container.find('div[data-field=entry-link-anchor-selector]').show();
+                    break;
                 case 2:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').show();
                     container.find('div[data-field=entry-link-blank-window]').show();
+                    container.find('div[data-field=entry-link-anchor-selector]').hide();
                     break;
                 case 1:
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-page-selector]').show();
                     container.find('div[data-field=entry-link-blank-window]').show();
+                    container.find('div[data-field=entry-link-anchor-selector]').hide();
                     break;
                 default:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-blank-window]').hide();
+                    container.find('div[data-field=entry-link-anchor-selector]').hide();
                     break;
             }
         });
@@ -103,7 +111,9 @@ $tp = new TaskPermission();
 if ($rows) {
     foreach ($rows as $row) {
         $linkType = 0;
-        if ($row['linkURL']) {
+        if ($row['anchorLinkID']){
+           $linkType = 3; 
+        } else if ($row['linkURL']) {
             $linkType = 2;
         } else if ($row['internalLinkCID']) {
             $linkType = 1;
@@ -120,6 +130,7 @@ if ($rows) {
                     icons: <?php echo json_encode($icons) ?>,
                     link_url: '<?php echo $row['linkURL'] ?>',
                     link_type: '<?php echo $linkType ?>',
+                    anchor_link : '<?php echo $row['anchorLinkID'] ?>',
                     title: '<?php echo addslashes($row['title']) ?>',
                     sort_order: '<?php echo $row['sortOrder'] ?>',
                     openInNewWindow : '<?php echo $row['openInNewWindow']?>'
@@ -145,6 +156,7 @@ if ($rows) {
                             cID: '',
                             link_type: 0,
                             sort_order: '',
+                            anchor_link: '',
                             image_url: '',
                             openInNewWindow: 0
                         }));
@@ -272,7 +284,7 @@ if ($rows) {
             <div class="form-group ccm-block-manualnav-select-icon" style="margin-right: 5px;">
                 <select id="icon2" name="<?php echo $view->field('icon') . '[]'?>" class="form-control" onchange="iconPreview(this)">
                     <% _.each(icons,function(val,key){ %>
-                        <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
+                        <option value="<%=key%>" <%if(icon == key){%> selected <% } %>>&#xf061; <%=val%></option>
                     <% }); %>
                 </select>
                 <i data-preview="icon" <%if(icon) { %>class="fa fa-<%=icon%>"<% } %>></i>
@@ -291,6 +303,7 @@ if ($rows) {
                             <option value="0" <% if (!link_type) { %>selected<% } %>><?php echo t('None') ?></option>
                             <option value="1" <% if (link_type == 1) { %>selected<% } %>><?php echo t('Another Page') ?></option>
                             <option value="2" <% if (link_type == 2) { %>selected<% } %>><?php echo t('External URL') ?></option>
+                            <option value="3" <% if (link_type == 3) { %>selected<% } %>><?php echo t('Anchor Link') ?></option>
                         </select>
                     </div>
                 </div>
@@ -301,10 +314,30 @@ if ($rows) {
                     </div>
 
                     <div style="display: none;" data-field="entry-link-page-selector" class="form-group">
+                        <div>
+                            <label><?php echo t('Choose Anchor:') ?></label>
+                            <select name="anchorLinkID[]">
+                                <?php 
+                                foreach($anchorIDs as $ai){ ?>
+                                    <option value="<?php echo h($ai) ?>" <% if (anchor_link == "<?php echo h($ai)?>") { %>selected<% } %> ><?php echo h($ai) ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: none;" data-field="entry-link-page-selector-anchor" class="form-group">
                         <label><?php echo t('Choose Page:') ?></label>
                         <div data-field="entry-link-page-selector-select"></div>
                     </div>
                     <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
+                    <div style="display: none;" data-field="entrentry-link-page-selector-selecty-link-anchor-selector" class="form-group">
+                        <label><?php echo t('Choose Anchor:') ?></label>
+                        <select name="anchorLinkID[]">
+                            <?php 
+                            foreach($anchorIDs as $ai){ ?>
+                                <option value="<?php echo h($ai) ?>" <% if (anchor_link == "<?php echo h($ai)?>") { %>selected<% } %> ><?php echo h($ai) ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>
             </div>
 

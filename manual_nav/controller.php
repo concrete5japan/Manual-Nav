@@ -12,8 +12,8 @@ defined('C5_EXECUTE') or die(_("Access Denied."));
 class Controller extends Package {
 
     protected $pkgHandle = 'manual_nav';
-    protected $appVersionRequired = '5.7.1';
-    protected $pkgVersion = '2.2.0';
+    protected $appVersionRequired = '5.8.1';
+    protected $pkgVersion = '3.0.0b1';
     protected static $blockTypes = array(
         array(
             'handle' => 'manual_nav', 'set' => 'navigation',
