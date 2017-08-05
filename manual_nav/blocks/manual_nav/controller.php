@@ -91,15 +91,30 @@ class Controller extends BlockController {
 
         $c = \Page::getCurrentPage();
         $areaBlocks = $c->getBlocks();
-        $anchorIDs = [];
+        $blockAnchorIDs = [];
         foreach($areaBlocks as $index => $ab){
             if($ab->getCustomStyle(true)->getStyleSet() instanceof \Concrete\Core\Entity\StyleCustomizer\Inline\StyleSet){
                 if($ab->getCustomStyle(true)->getStyleSet()->getCustomID()){
-                    $anchorIDs[] = $ab->getCustomStyle(true)->getStyleSet()->getCustomID();
+                    $blockAnchorIDs[] = $ab->getCustomStyle(true)->getStyleSet()->getCustomID();
                 }
             }
         }
+
+        $as = new \Area('main');
+        $areas = $as->getListOnPage($c);
+        $areaAnchorIDs = [];
+        foreach($areas as $area){
+            if(is_object($c->getAreaCustomStyle($area))){
+                $set = $c->getAreaCustomStyle($area)->getStyleSet();
+                if($set->getCustomID()){
+                    $areaAnchorIDs[] = $set->getCustomID();
+                }
+            }
+        }
+
         $this->set('anchorIDs',$anchorIDs);
+        $this->set('blockAnchorIDs',$blockAnchorIDs);
+        $this->set('areaAnchorIDs',$areaAnchorIDs);
     }
 
     protected function getIconClasses()

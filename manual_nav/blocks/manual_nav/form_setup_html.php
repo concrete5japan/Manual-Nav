@@ -85,25 +85,25 @@ $tp = new TaskPermission();
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-blank-window]').hide();
-                    container.find('div[data-field=entry-link-anchor-selector]').show();
+                    container.find('div[data-field=entrentry-link-page-selector-selecty-link-anchor-selector]').show();
                     break;
                 case 2:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').show();
                     container.find('div[data-field=entry-link-blank-window]').show();
-                    container.find('div[data-field=entry-link-anchor-selector]').hide();
+                    container.find('div[data-field=entrentry-link-page-selector-selecty-link-anchor-selector]').hide();
                     break;
                 case 1:
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-page-selector]').show();
                     container.find('div[data-field=entry-link-blank-window]').show();
-                    container.find('div[data-field=entry-link-anchor-selector]').hide();
+                    container.find('div[data-field=entrentry-link-page-selector-selecty-link-anchor-selector]').hide();
                     break;
                 default:
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-blank-window]').hide();
-                    container.find('div[data-field=entry-link-anchor-selector]').hide();
+                    container.find('div[data-field=entrentry-link-page-selector-selecty-link-anchor-selector]').hide();
                     break;
             }
         });
@@ -313,30 +313,28 @@ if ($rows) {
                         <textarea name="linkURL[]"><%=link_url%></textarea>
                     </div>
 
-                    <div style="display: none;" data-field="entry-link-page-selector" class="form-group">
-                        <div>
-                            <label><?php echo t('Choose Anchor:') ?></label>
-                            <select name="anchorLinkID[]">
-                                <?php 
-                                foreach($anchorIDs as $ai){ ?>
-                                    <option value="<?php echo h($ai) ?>" <% if (anchor_link == "<?php echo h($ai)?>") { %>selected<% } %> ><?php echo h($ai) ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="display: none;" data-field="entry-link-page-selector-anchor" class="form-group">
-                        <label><?php echo t('Choose Page:') ?></label>
-                        <div data-field="entry-link-page-selector-select"></div>
-                    </div>
                     <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
                     <div style="display: none;" data-field="entrentry-link-page-selector-selecty-link-anchor-selector" class="form-group">
                         <label><?php echo t('Choose Anchor:') ?></label>
-                        <select name="anchorLinkID[]">
-                            <?php 
-                            foreach($anchorIDs as $ai){ ?>
-                                <option value="<?php echo h($ai) ?>" <% if (anchor_link == "<?php echo h($ai)?>") { %>selected<% } %> ><?php echo h($ai) ?></option>
-                            <?php } ?>
-                        </select>
+                            <select name="anchorLinkID[]" class="form-control">
+                                <optgroup label="<?php echo t('Areas')?>">
+                                    <?php 
+                                    if(is_array($areaAnchorIDs)){
+                                        foreach($areaAnchorIDs as $aid){ ?>
+                                            <option value="<?php echo h($aid) ?>" <% if (anchor_link == "<?php echo h($aid)?>") { %>selected<% } %> ><?php echo h($aid) ?></option>
+                                        <?php }
+                                    } ?>
+                                </optgroup>
+
+                                <optgroup label="<?php echo t('Blocks')?>">
+                                    <?php
+                                    if(is_array($blockAnchorIDs)){
+                                        foreach($blockAnchorIDs as $bi){ ?>
+                                            <option value="<?php echo h($bi) ?>" <% if (anchor_link == "<?php echo h($bi)?>") { %>selected<% } %> ><?php echo h($bi) ?></option>
+                                        <?php }
+                                    }?>
+                                </optgroup>
+                            </select>
                     </div>
                 </div>
             </div>
