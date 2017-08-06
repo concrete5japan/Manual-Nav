@@ -12,7 +12,7 @@ defined('C5_EXECUTE') or die(_("Access Denied."));
 class Controller extends Package {
 
     protected $pkgHandle = 'manual_nav';
-    protected $appVersionRequired = '5.8.1';
+    protected $appVersionRequired = '5.8.2.0';
     protected $pkgVersion = '3.0.0b1';
     protected static $blockTypes = array(
         array(
