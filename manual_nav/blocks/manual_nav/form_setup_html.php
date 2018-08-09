@@ -135,7 +135,7 @@ if ($rows) {
                     sort_order: '<?php echo $row['sortOrder'] ?>',
                     openInNewWindow : '<?php echo $row['openInNewWindow']?>'
                 }));
-                        manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
+                        manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector-select]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($row['internalLinkCID']) ?><?php } else { ?>false<?php } ?>
                             });
         <?php
@@ -312,8 +312,14 @@ if ($rows) {
                         <label><?php echo t('URL:') ?></label>
                         <textarea name="linkURL[]"><%=link_url%></textarea>
                     </div>
+                    
+                    <div style="display: none;" data-field="entry-link-page-selector" class="form-group">
+                        <label><?php echo t('Choose Page:') ?></label>
+                        <div data-field="entry-link-page-selector-select"></div>
+                    </div>
 
                     <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
+
                     <div style="display: none;" data-field="entrentry-link-page-selector-selecty-link-anchor-selector" class="form-group">
                         <label><?php echo t('Choose Anchor:') ?></label>
                             <select name="anchorLinkID[]" class="form-control">
