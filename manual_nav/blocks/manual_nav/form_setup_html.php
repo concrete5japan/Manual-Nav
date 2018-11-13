@@ -82,17 +82,26 @@ $tp = new TaskPermission();
         manualnavEntriesContainer.on('change', 'select[data-field=entry-link-select]', function () {
             var container = $(this).closest('.ccm-manualnav-entry');
             switch (parseInt($(this).val())) {
+                case 3:
+                    container.find('div[data-field=entry-link-file-selector]').show();
+                    container.find('div[data-field=entry-link-page-selector]').hide();
+                    container.find('div[data-field=entry-link-url]').hide();
+                    container.find('div[data-field=entry-link-blank-window]').show();
+                    break;
                 case 2:
+                    container.find('div[data-field=entry-link-file-selector]').hide();
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').show();
                     container.find('div[data-field=entry-link-blank-window]').show();
                     break;
                 case 1:
-                    container.find('div[data-field=entry-link-url]').hide();
+                    container.find('div[data-field=entry-link-file-selector]').hide();
                     container.find('div[data-field=entry-link-page-selector]').show();
+                    container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-blank-window]').show();
                     break;
                 default:
+                    container.find('div[data-field=entry-link-file-selector]').hide();
                     container.find('div[data-field=entry-link-page-selector]').hide();
                     container.find('div[data-field=entry-link-url]').hide();
                     container.find('div[data-field=entry-link-blank-window]').hide();
@@ -102,11 +111,14 @@ $tp = new TaskPermission();
 <?php
 if ($rows) {
     foreach ($rows as $row) {
-        $linkType = 0;
-        if ($row['linkURL']) {
+        if ($row['internalLinkFID']) {
+            $linkType = 3;
+        } elseif ($row['linkURL']) {
             $linkType = 2;
-        } else if ($row['internalLinkCID']) {
+        } elseif ($row['internalLinkCID']) {
             $linkType = 1;
+        } else {
+            $linkType = 0;
         }
         ?>
                 manualnavEntriesContainer.append(_templateSlide({
@@ -127,6 +139,10 @@ if ($rows) {
                         manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($row['internalLinkCID']) ?><?php } else { ?>false<?php } ?>
                             });
+
+                    manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
+                        'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) { ?><?php echo intval($row['internalLinkFID']) ?><?php } else { ?>false<?php } ?>
+                    });
         <?php
     }
 }
@@ -155,6 +171,9 @@ if ($rows) {
                         attachFileManagerLaunch(newSlide.find('.ccm-pick-manualnav-image'));
                         newSlide.find('div[data-field=entry-link-page-selector-select]').concretePageSelector({
                             'inputName': 'internalLinkCID[]'
+                        });
+                        newSlide.find('div[data-field=entry-link-file-selector-select]').concreteFileSelector({
+                            'inputName': 'internalLinkFID[]'
                         });
 
                         attachSortDesc(newSlide.find('i.fa-sort-desc'));
@@ -291,10 +310,12 @@ if ($rows) {
                             <option value="0" <% if (!link_type) { %>selected<% } %>><?php echo t('None') ?></option>
                             <option value="1" <% if (link_type == 1) { %>selected<% } %>><?php echo t('Another Page') ?></option>
                             <option value="2" <% if (link_type == 2) { %>selected<% } %>><?php echo t('External URL') ?></option>
+                            <option value="3" <% if (link_type == 3) { %>selected<% } %>><?php echo t('File') ?></option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-8">
+
                     <div style="display: none;" data-field="entry-link-url" class="form-group">
                         <label><?php echo t('URL:') ?></label>
                         <textarea name="linkURL[]"><%=link_url%></textarea>
@@ -304,6 +325,13 @@ if ($rows) {
                         <label><?php echo t('Choose Page:') ?></label>
                         <div data-field="entry-link-page-selector-select"></div>
                     </div>
+
+                    <div style="display: none;" data-field="entry-link-file-selector" class="ccm-file-selector">
+                        <div data-field="entry-link-file-selector-select"></div>
+                    </div>
+
+
+
                     <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
                 </div>
             </div>

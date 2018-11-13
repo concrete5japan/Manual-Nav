@@ -37,6 +37,10 @@
             <unsigned />
             <default value="0" />
         </field>
+        <field name="internalLinkFID"  type="I">
+            <unsigned />
+            <default value="0" />
+        </field>
         <field name="title" type="X2"></field>
         <field name="sortOrder" type="I"></field>
         <field name="openInNewWindow" type="L">

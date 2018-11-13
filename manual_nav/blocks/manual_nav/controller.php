@@ -110,8 +110,13 @@ class Controller extends BlockController {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 $q['linkURL'] =  ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
                 $q['collectionName'] = $lc->getCollectionName();
+            } elseif (!$q['linkURL'] && $q['internalLinkFID']) {
+                $file = File::getByID((int)$q['internalLinkFID']);
+                $q['linkURL'] = $file->getDownloadURL();
+                $q['collectionName'] = $file->getFileName();
             }
-            //image type
+
+                //image type
             if ($this->displayImage == 1) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 if (is_object($lc)) {
@@ -171,6 +176,7 @@ class Controller extends BlockController {
         while ($i < $count) {
             $linkURL = $args['linkURL'][$i];
             $internalLinkCID = $args['internalLinkCID'][$i];
+            $internalLinkFID = $args['internalLinkFID'][$i];
             switch (intval($args['linkType'][$i])) {
                 case 1:
                     $linkURL = '';
@@ -189,7 +195,7 @@ class Controller extends BlockController {
             
             $openInNewWindow =  $args['openInNewWindow'][$i] == null ? 0 : 1;
 
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
+            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', array(
                 $this->bID,
                 $args['fID'][$i],
                 $args['icon'][$i],
@@ -197,6 +203,7 @@ class Controller extends BlockController {
                 $args['sortOrder'][$i],
                 $linkURL,
                 $internalLinkCID,
+                $internalLinkFID,
                 $openInNewWindow
                     )
             );
