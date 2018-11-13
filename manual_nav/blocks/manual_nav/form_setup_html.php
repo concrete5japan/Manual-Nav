@@ -1,20 +1,20 @@
 <?php
-defined('C5_EXECUTE') or die("Access Denied.");
+defined('C5_EXECUTE') or die('Access Denied.');
 
 $fp = FilePermissions::getGlobal();
 $tp = new TaskPermission();
 ?>
 <div class="form-group">
-    <label><?php echo t('Include Image.') ?></label>
+    <label><?php echo t('Include Image.'); ?></label>
     <select data-field="entry-image-select" name="displayImage" class="form-control" style="width: 60%;">
-        <option value="0" <?php echo $displayImage == 0 ? 'selected' : '' ?>><?php echo t('Image None') ?></option>
-        <option value="1" <?php echo $displayImage == 1 ? 'selected' : '' ?>><?php echo t('Use page attribute. Handle name is thumbnail') ?></option>
-        <option value="2" <?php echo $displayImage == 2 ? 'selected' : '' ?>><?php echo t('Image setting here') ?></option>
-        <option value="3" <?php echo $displayImage == 3 ? 'selected' : '' ?>><?php echo t('Use font awesome icon') ?></option>
+        <option value="0" <?php echo $displayImage == 0 ? 'selected' : ''; ?>><?php echo t('Image None'); ?></option>
+        <option value="1" <?php echo $displayImage == 1 ? 'selected' : ''; ?>><?php echo t('Use page attribute. Handle name is thumbnail'); ?></option>
+        <option value="2" <?php echo $displayImage == 2 ? 'selected' : ''; ?>><?php echo t('Image setting here'); ?></option>
+        <option value="3" <?php echo $displayImage == 3 ? 'selected' : ''; ?>><?php echo t('Use font awesome icon'); ?></option>
     </select>
 </div>
 <script>
-    var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Loader::helper('validation/token')->generate('editor') ?>";
+    var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Loader::helper('validation/token')->generate('editor'); ?>";
     $(document).ready(function () {
 
         var ccmReceivingEntry = '';
@@ -23,7 +23,7 @@ $tp = new TaskPermission();
 
         var attachDelete = function ($obj) {
             $obj.click(function () {
-                var deleteIt = confirm('<?php echo t('Are you sure?') ?>');
+                var deleteIt = confirm('<?php echo t('Are you sure?'); ?>');
                 if (deleteIt == true) {
                     $(this).closest('.ccm-manualnav-entry').remove();
                     doSortCount();
@@ -119,29 +119,40 @@ if ($rows) {
             $linkType = 1;
         } else {
             $linkType = 0;
-        }
-        ?>
+        } ?>
                 manualnavEntriesContainer.append(_templateSlide({
-                    fID: '<?php echo $row['fID'] ?>',
-        <?php if (File::getByID($row['fID'])) { ?>
+                    fID: '<?php echo $row['fID']; ?>',
+        <?php if (File::getByID($row['fID'])) {
+            ?>
                     image_url: '<?php echo File::getByID($row['fID'])->getThumbnailURL('file_manager_listing'); ?>',
-        <?php } else { ?>
+        <?php
+        } else {
+            ?>
                     image_url: '',
-        <?php } ?>
-                    icon: '<?php echo $row['icon']?>',
-                    icons: <?php echo json_encode($icons) ?>,
-                    link_url: '<?php echo $row['linkURL'] ?>',
-                    link_type: '<?php echo $linkType ?>',
-                    title: '<?php echo addslashes($row['title']) ?>',
-                    sort_order: '<?php echo $row['sortOrder'] ?>',
-                    openInNewWindow : '<?php echo $row['openInNewWindow']?>'
+        <?php
+        } ?>
+                    icon: '<?php echo $row['icon']; ?>',
+                    icons: <?php echo json_encode($icons); ?>,
+                    link_url: '<?php echo $row['linkURL']; ?>',
+                    link_type: '<?php echo $linkType; ?>',
+                    title: '<?php echo addslashes($row['title']); ?>',
+                    sort_order: '<?php echo $row['sortOrder']; ?>',
+                    openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
                         manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
-                    'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) { ?><?php echo intval($row['internalLinkCID']) ?><?php } else { ?>false<?php } ?>
+                    'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) {
+            ?><?php echo intval($row['internalLinkCID']); ?><?php
+        } else {
+            ?>false<?php
+        } ?>
                             });
 
                     manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                        'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) { ?><?php echo intval($row['internalLinkFID']) ?><?php } else { ?>false<?php } ?>
+                        'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) {
+            ?><?php echo intval($row['internalLinkFID']); ?><?php
+        } else {
+            ?>false<?php
+        } ?>
                     });
         <?php
     }
@@ -157,7 +168,7 @@ if ($rows) {
                             title: '',
                             link_url: '',
                             icon: '',
-                            icons: <?php echo json_encode($icons) ?>,
+                            icons: <?php echo json_encode($icons); ?>,
                             cID: '',
                             link_type: 0,
                             sort_order: '',
@@ -266,7 +277,7 @@ if ($rows) {
     <div class="ccm-manualnav-entries">
 
     </div>
-    <span class="btn btn-success ccm-add-manualnav-entry"><?php echo t('Add Link') ?></span>
+    <span class="btn btn-success ccm-add-manualnav-entry"><?php echo t('Add Link'); ?></span>
 </div>
 <script type="text/template" id="imageTemplate">
 <div class="ccm-manualnav-entry well">
@@ -278,7 +289,7 @@ if ($rows) {
     <div class="row">
         <div class="col-md-3">
             <div class="form-group set-here-image">
-                <label><?php echo t('Image') ?></label>
+                <label><?php echo t('Image'); ?></label>
                 <div class="ccm-pick-manualnav-image">
                     <% if (image_url.length > 0) { %>
                     <img src="<%= image_url %>" />
@@ -286,10 +297,10 @@ if ($rows) {
                     <i class="fa fa-picture-o"></i>
                     <% } %>
                 </div>
-                <input type="hidden" name="<?php echo $view->field('fID') ?>[]" class="image-fID" value="<%=fID%>" />
+                <input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>" />
             </div>
             <div class="form-group ccm-block-manualnav-select-icon" style="margin-right: 5px;">
-                <select id="icon2" name="<?php echo $view->field('icon') . '[]'?>" class="form-control" onchange="iconPreview(this)">
+                <select id="icon2" name="<?php echo $view->field('icon') . '[]'; ?>" class="form-control" onchange="iconPreview(this)">
                     <% _.each(icons,function(val,key){ %>
                         <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
                     <% }); %>
@@ -299,30 +310,30 @@ if ($rows) {
         </div>
         <div class="col-md-9">
             <div class="form-group">
-                <label><?php echo t('Title') ?></label>
-                <input type="text" name="<?php echo $view->field('title') ?>[]" value="<%=title%>" />
+                <label><?php echo t('Title'); ?></label>
+                <input type="text" name="<?php echo $view->field('title'); ?>[]" value="<%=title%>" />
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label><?php echo t('Link') ?></label>
+                        <label><?php echo t('Link'); ?></label>
                         <select data-field="entry-link-select" name="linkType[]" class="form-control">
-                            <option value="0" <% if (!link_type) { %>selected<% } %>><?php echo t('None') ?></option>
-                            <option value="1" <% if (link_type == 1) { %>selected<% } %>><?php echo t('Another Page') ?></option>
-                            <option value="2" <% if (link_type == 2) { %>selected<% } %>><?php echo t('External URL') ?></option>
-                            <option value="3" <% if (link_type == 3) { %>selected<% } %>><?php echo t('File') ?></option>
+                            <option value="0" <% if (!link_type) { %>selected<% } %>><?php echo t('None'); ?></option>
+                            <option value="1" <% if (link_type == 1) { %>selected<% } %>><?php echo t('Another Page'); ?></option>
+                            <option value="2" <% if (link_type == 2) { %>selected<% } %>><?php echo t('External URL'); ?></option>
+                            <option value="3" <% if (link_type == 3) { %>selected<% } %>><?php echo t('File'); ?></option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-8">
 
                     <div style="display: none;" data-field="entry-link-url" class="form-group">
-                        <label><?php echo t('URL:') ?></label>
+                        <label><?php echo t('URL:'); ?></label>
                         <textarea name="linkURL[]"><%=link_url%></textarea>
                     </div>
 
                     <div style="display: none;" data-field="entry-link-page-selector" class="form-group">
-                        <label><?php echo t('Choose Page:') ?></label>
+                        <label><?php echo t('Choose Page:'); ?></label>
                         <div data-field="entry-link-page-selector-select"></div>
                     </div>
 
@@ -332,13 +343,13 @@ if ($rows) {
 
 
 
-                    <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder') ?>[]" value="<%=sort_order%>"/>
+                    <input class="ccm-manualnav-entry-sort" type="hidden" name="<?php echo $view->field('sortOrder'); ?>[]" value="<%=sort_order%>"/>
                 </div>
             </div>
 
             <div class="checkbox" style="display: none;" data-field="entry-link-blank-window" class="form-group">
                 <label><input type="checkbox" <% if(openInNewWindow==1){ %>checked <% } %> name="openInNewWindow[<%=sort_order%>]" value="1"  />
-                    <?php echo t('Open Link in New Window')?>
+                    <?php echo t('Open Link in New Window'); ?>
                 </label>
             </div>
         </div>
