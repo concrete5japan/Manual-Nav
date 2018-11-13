@@ -2,7 +2,6 @@
 namespace Concrete\Package\ManualNav\Block\ManualNav;
 
 use Concrete\Core\Block\BlockController;
-use Database;
 use Page;
 use File;
 use Core;
@@ -35,7 +34,7 @@ class Controller extends BlockController
     public function getSearchableContent()
     {
         $content = '';
-        $db = Database::getActiveConnection();
+        $db = $this->app->make('database')->connection();
         $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
@@ -55,7 +54,7 @@ class Controller extends BlockController
         $this->requireAsset('css', 'font-awesome');
         $classes = $this->getIconClasses();
         $icons = ['' => t('Choose Icon')];
-        $txt = Core::make('helper/text');
+        $txt = $this->app->make('helper/text');
         foreach ($classes as $class) {
             $icons[$class] = $txt->unhandle($class);
         }
@@ -69,8 +68,8 @@ class Controller extends BlockController
         $this->requireAsset('redactor');
 
         $this->requireAsset('css', 'font-awesome');
-        $db = Database::getActiveConnection();
-        $query = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
+        $db = $this->app->make('database')->connection();
+        $query = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         $this->set('rows', $query);
 
         $this->requireAsset('css', 'font-awesome');
@@ -93,11 +92,9 @@ class Controller extends BlockController
         $rules = $parser->rules;
 
         foreach ($rules as $rule) {
-            if ($rule instanceof Less_Tree_Rule) {
-                if (strpos($rule->name, '@fa-var') === 0) {
-                    $name = str_replace('@fa-var-', '', $rule->name);
-                    $icons[] = $name;
-                }
+            if (($rule instanceof Less_Tree_Rule) && strpos($rule->name, '@fa-var') === 0) {
+                $name = str_replace('@fa-var-', '', $rule->name);
+                $icons[] = $name;
             }
         }
         asort($icons);
@@ -107,8 +104,8 @@ class Controller extends BlockController
 
     public function view()
     {
-        $db = Database::getActiveConnection();
-        $r = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
+        $db = $this->app->make('database')->connection();
+        $r = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         // in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
         $rows = [];
         foreach ($r as $q) {
@@ -134,10 +131,10 @@ class Controller extends BlockController
 
             $q['isVectorImage'] = false;
             if ($this->displayImage) {
-                $f = Core::make('helper/file');
+                $fh = $this->app->make('helper/file');
                 $ex = ['svg'];
                 if (is_object($q['image'])) {
-                    $q['isVectorImage'] = in_array(strtolower(Core::make('helper/file')->getExtension($q['image']->getFilename())), $ex, true);
+                    $q['isVectorImage'] = in_array(strtolower($fh->getExtension($q['image']->getFilename())), $ex, true);
                 }
             }
 
@@ -149,12 +146,12 @@ class Controller extends BlockController
     public function duplicate($newBID)
     {
         parent::duplicate($newBID);
-        $db = Database::getActiveConnection();
+        $db = $this->app->make('database')->connection();
         $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         while ($row = $r->FetchRow()) {
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', [
+            $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $newBID,
                 $row['fID'],
                 $row['icon'],
@@ -162,6 +159,7 @@ class Controller extends BlockController
                 $row['title'],
                 $row['sortOrder'],
                 $row['internalLinkCID'],
+                $row['internalLinkFID'],
                 $row['openInNewWindow'],
                 ]
             );
@@ -170,15 +168,15 @@ class Controller extends BlockController
 
     public function delete()
     {
-        $db = Database::getActiveConnection();
+        $db = $this->app->make('database')->connection();
         $db->delete('btManualNavEntries', ['bID' => $this->bID]);
         parent::delete();
     }
 
     public function save($args)
     {
-        $db = Database::getActiveConnection();
-        $db->execute('DELETE from btManualNavEntries WHERE bID = ?', [$this->bID]);
+        $db = $this->app->make('database')->connection();
+        $db->executeQuery('DELETE from btManualNavEntries WHERE bID = ?', [$this->bID]);
         $count = count($args['sortOrder']);
         $i = 0;
         parent::save($args);
@@ -186,7 +184,7 @@ class Controller extends BlockController
             $linkURL = $args['linkURL'][$i];
             $internalLinkCID = $args['internalLinkCID'][$i];
             $internalLinkFID = $args['internalLinkFID'][$i];
-            switch (intval($args['linkType'][$i])) {
+            switch ((int)$args['linkType'][$i]) {
                 case 1:
                     $linkURL = '';
                     break;
@@ -204,7 +202,7 @@ class Controller extends BlockController
 
             $openInNewWindow = $args['openInNewWindow'][$i] == null ? 0 : 1;
 
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
+            $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $this->bID,
                 $args['fID'][$i],
                 $args['icon'][$i],

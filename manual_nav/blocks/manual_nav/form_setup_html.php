@@ -1,6 +1,9 @@
 <?php
 defined('C5_EXECUTE') or die('Access Denied.');
 
+$app = \Concrete\Core\Support\Facade\Application::getFacadeApplication();
+$token = $app->make('helper/validation/token');
+
 $fp = FilePermissions::getGlobal();
 $tp = new TaskPermission();
 ?>
@@ -14,7 +17,7 @@ $tp = new TaskPermission();
     </select>
 </div>
 <script>
-    var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Loader::helper('validation/token')->generate('editor'); ?>";
+    var CCM_EDITOR_SECURITY_TOKEN = "<?php echo $token->generate('editor'); ?>";
     $(document).ready(function () {
 
         var ccmReceivingEntry = '';
@@ -141,7 +144,7 @@ if ($rows) {
                 }));
                         manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) {
-            ?><?php echo intval($row['internalLinkCID']); ?><?php
+            ?><?php echo (int)$row['internalLinkCID']; ?><?php
         } else {
             ?>false<?php
         } ?>
@@ -149,7 +152,7 @@ if ($rows) {
 
                     manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
                         'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) {
-            ?><?php echo intval($row['internalLinkFID']); ?><?php
+            ?><?php echo (int)$row['internalLinkFID']; ?><?php
         } else {
             ?>false<?php
         } ?>

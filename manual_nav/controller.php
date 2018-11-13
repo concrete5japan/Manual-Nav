@@ -34,7 +34,7 @@ class Controller extends Package
         foreach (self::$blockTypes as $blockType) {
             $existingBlockType = BlockType::getByHandle($blockType['handle']);
             if (!$existingBlockType) {
-                BlockType::installBlockTypeFromPackage($blockType['handle'], $pkg);
+                BlockType::installBlockType($blockType['handle'], $pkg);
             }
             if (isset($blockType['set']) && $blockType['set']) {
                 $navigationBlockTypeSet = BlockTypeSet::getByHandle($blockType['set']);
