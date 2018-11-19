@@ -1,76 +1,80 @@
 <?php
-
 namespace Concrete\Package\ManualNav\Block\ManualNav;
 
 use Concrete\Core\Block\BlockController;
-use Database;
 use Page;
 use File;
 use Core;
 use Less_Parser;
 use Less_Tree_Rule;
 
-class Controller extends BlockController {
-
+class Controller extends BlockController
+{
     protected $btTable = 'btManualNav';
-    protected $btExportTables = array('btManualNav', 'btManualNavEntries');
-    protected $btInterfaceWidth = "600";
+    protected $btExportTables = ['btManualNav', 'btManualNavEntries'];
+    protected $btInterfaceWidth = '600';
     protected $btWrapperClass = 'ccm-ui';
-    protected $btInterfaceHeight = "465";
+    protected $btInterfaceHeight = '465';
     protected $btCacheBlockRecord = true;
 //    protected $btExportFileColumns = array('fID');
     protected $btCacheBlockOutput = true;
     protected $btCacheBlockOutputOnPost = true;
     protected $btCacheBlockOutputForRegisteredUsers = false;
 
-    public function getBlockTypeDescription() {
-        return t("Manual Nav.");
+    public function getBlockTypeDescription()
+    {
+        return t('Manual Nav.');
     }
 
-    public function getBlockTypeName() {
-        return t("Manual Nav");
+    public function getBlockTypeName()
+    {
+        return t('Manual Nav');
     }
 
-    public function getSearchableContent() {
+    public function getSearchableContent()
+    {
         $content = '';
-        $db = Database::getActiveConnection();
-        $v = array($this->bID);
+        $db = $this->app->make('database')->connection();
+        $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         foreach ($r as $row) {
-            $content.= $row['title'] . ' ';
+            $content .= $row['title'] . ' ';
         }
+
         return $content;
     }
 
-    public function add() {
+    public function add()
+    {
         $this->requireAsset('core/file-manager');
         $this->requireAsset('core/sitemap');
         $this->requireAsset('redactor');
 
         $this->requireAsset('css', 'font-awesome');
         $classes = $this->getIconClasses();
-        $icons = array('' => t('Choose Icon'));
-        $txt = Core::make('helper/text');
+        $icons = ['' => t('Choose Icon')];
+        $txt = $this->app->make('helper/text');
         foreach ($classes as $class) {
             $icons[$class] = $txt->unhandle($class);
         }
         $this->set('icons', $icons);
     }
 
-    public function edit() {
+    public function edit()
+    {
         $this->requireAsset('core/sitemap');
         $this->requireAsset('core/file-manager');
         $this->requireAsset('redactor');
 
         $this->requireAsset('css', 'font-awesome');
-        $db = Database::getActiveConnection();
-        $query = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+        $db = $this->app->make('database')->connection();
+        $query = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         $this->set('rows', $query);
 
         $this->requireAsset('css', 'font-awesome');
         $classes = $this->getIconClasses();
-        $icons = array('' => t('Choose Icon'));
+        $icons = ['' => t('Choose Icon')];
         $txt = Core::make('helper/text');
         foreach ($classes as $class) {
             $icons[$class] = $txt->unhandle($class);
@@ -81,18 +85,16 @@ class Controller extends BlockController {
     protected function getIconClasses()
     {
         $iconLessFile = DIR_BASE_CORE . '/css/build/vendor/font-awesome/variables.less';
-        $icons = array();
+        $icons = [];
 
         $l = new Less_Parser();
         $parser = $l->parseFile($iconLessFile, false, true);
         $rules = $parser->rules;
 
         foreach ($rules as $rule) {
-            if ($rule instanceof Less_Tree_Rule) {
-                if (strpos($rule->name, '@fa-var') === 0) {
-                    $name = str_replace('@fa-var-', '', $rule->name);
-                    $icons[] = $name;
-                }
+            if (($rule instanceof Less_Tree_Rule) && strpos($rule->name, '@fa-var') === 0) {
+                $name = str_replace('@fa-var-', '', $rule->name);
+                $icons[] = $name;
             }
         }
         asort($icons);
@@ -100,49 +102,56 @@ class Controller extends BlockController {
         return $icons;
     }
 
-    public function view() {
-        $db = Database::getActiveConnection();
-        $r = $db->GetAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+    public function view()
+    {
+        $db = $this->app->make('database')->connection();
+        $r = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         // in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
-        $rows = array();
+        $rows = [];
         foreach ($r as $q) {
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
-                $q['linkURL'] =  ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
+                $q['linkURL'] = ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
                 $q['collectionName'] = $lc->getCollectionName();
+            } elseif (!$q['linkURL'] && $q['internalLinkFID']) {
+                $file = File::getByID((int) $q['internalLinkFID']);
+                $q['linkURL'] = $file->getDownloadURL();
+                $q['collectionName'] = $file->getFileName();
             }
+
             //image type
             if ($this->displayImage == 1) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 if (is_object($lc)) {
                     $q['image'] = $lc->getAttribute('thumbnail');
                 }
-            } else if ($this->displayImage == 2) {
+            } elseif ($this->displayImage == 2) {
                 $q['image'] = File::getByID($q['fID']);
             }
-            
+
             $q['isVectorImage'] = false;
-            if($this->displayImage){
-                $f = Core::make('helper/file');
-                $ex = array('svg');
-                if(is_object($q['image'])){
-                    $q['isVectorImage'] = in_array(strtolower(Core::make('helper/file')->getExtension($q['image']->getFilename())),$ex,true);
+            if ($this->displayImage) {
+                $fh = $this->app->make('helper/file');
+                $ex = ['svg'];
+                if (is_object($q['image'])) {
+                    $q['isVectorImage'] = in_array(strtolower($fh->getExtension($q['image']->getFilename())), $ex, true);
                 }
             }
-            
+
             $rows[] = $q;
         }
         $this->set('rows', $rows);
     }
 
-    public function duplicate($newBID) {
+    public function duplicate($newBID)
+    {
         parent::duplicate($newBID);
-        $db = Database::getActiveConnection();
-        $v = array($this->bID);
+        $db = $this->app->make('database')->connection();
+        $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
         while ($row = $r->FetchRow()) {
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
+            $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $newBID,
                 $row['fID'],
                 $row['icon'],
@@ -150,28 +159,32 @@ class Controller extends BlockController {
                 $row['title'],
                 $row['sortOrder'],
                 $row['internalLinkCID'],
-                $row['openInNewWindow']
-                )
+                $row['internalLinkFID'],
+                $row['openInNewWindow'],
+                ]
             );
         }
     }
 
-    public function delete() {
-        $db = Database::getActiveConnection();
-        $db->delete('btManualNavEntries', array('bID' => $this->bID));
+    public function delete()
+    {
+        $db = $this->app->make('database')->connection();
+        $db->delete('btManualNavEntries', ['bID' => $this->bID]);
         parent::delete();
     }
 
-    public function save($args) {
-        $db = Database::getActiveConnection();
-        $db->execute('DELETE from btManualNavEntries WHERE bID = ?', array($this->bID));
+    public function save($args)
+    {
+        $db = $this->app->make('database')->connection();
+        $db->executeQuery('DELETE from btManualNavEntries WHERE bID = ?', [$this->bID]);
         $count = count($args['sortOrder']);
         $i = 0;
         parent::save($args);
         while ($i < $count) {
             $linkURL = $args['linkURL'][$i];
             $internalLinkCID = $args['internalLinkCID'][$i];
-            switch (intval($args['linkType'][$i])) {
+            $internalLinkFID = $args['internalLinkFID'][$i];
+            switch ((int)$args['linkType'][$i]) {
                 case 1:
                     $linkURL = '';
                     break;
@@ -186,10 +199,10 @@ class Controller extends BlockController {
             if ($args['fID'][$i] == null) {
                 $args['fID'][$i] = 0;
             }
-            
-            $openInNewWindow =  $args['openInNewWindow'][$i] == null ? 0 : 1;
 
-            $db->execute('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, openInNewWindow) values(?,?,?,?,?,?,?,?)', array(
+            $openInNewWindow = $args['openInNewWindow'][$i] == null ? 0 : 1;
+
+            $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $this->bID,
                 $args['fID'][$i],
                 $args['icon'][$i],
@@ -197,11 +210,11 @@ class Controller extends BlockController {
                 $args['sortOrder'][$i],
                 $linkURL,
                 $internalLinkCID,
-                $openInNewWindow
-                    )
+                $internalLinkFID,
+                $openInNewWindow,
+                    ]
             );
-            $i++;
+            ++$i;
         }
     }
-
 }
