@@ -125,15 +125,7 @@ if ($rows) {
         } ?>
                 manualnavEntriesContainer.append(_templateSlide({
                     fID: '<?php echo $row['fID']; ?>',
-        <?php if (File::getByID($row['fID'])) {
-            ?>
-                    image_url: '<?php echo File::getByID($row['fID'])->getThumbnailURL('file_manager_listing'); ?>',
-        <?php
-        } else {
-            ?>
-                    image_url: '',
-        <?php
-        } ?>
+                    image_url: '<?php echo File::getByID($row['fID']) ? File::getByID($row['fID'])->getThumbnailURL('file_manager_listing') : ''; ?>',
                     icon: '<?php echo $row['icon']; ?>',
                     icons: <?php echo json_encode($icons); ?>,
                     link_url: '<?php echo $row['linkURL']; ?>',
@@ -142,21 +134,13 @@ if ($rows) {
                     sort_order: '<?php echo $row['sortOrder']; ?>',
                     openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
-                        manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
-                    'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) {
-            ?><?php echo (int)$row['internalLinkCID']; ?><?php
-        } else {
-            ?>false<?php
-        } ?>
-                            });
+                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
+                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ?  (int)$row['internalLinkCID'] : 'false'; ?>
+                });
 
-                    manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                        'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) {
-            ?><?php echo (int)$row['internalLinkFID']; ?><?php
-        } else {
-            ?>false<?php
-        } ?>
-                    });
+                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
+                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int)$row['internalLinkFID']: 'false'; ?>
+                });
         <?php
     }
 }
