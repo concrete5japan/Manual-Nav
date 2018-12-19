@@ -83,34 +83,19 @@ $tp = new TaskPermission();
         };
 
         manualnavEntriesContainer.on('change', 'select[data-field=entry-link-select]', function () {
-            var container = $(this).closest('.ccm-manualnav-entry');
-            switch (parseInt($(this).val())) {
-                case 3:
-                    container.find('div[data-field=entry-link-file-selector]').show();
-                    container.find('div[data-field=entry-link-page-selector]').hide();
-                    container.find('div[data-field=entry-link-url]').hide();
-                    container.find('div[data-field=entry-link-blank-window]').show();
-                    break;
-                case 2:
-                    container.find('div[data-field=entry-link-file-selector]').hide();
-                    container.find('div[data-field=entry-link-page-selector]').hide();
-                    container.find('div[data-field=entry-link-url]').show();
-                    container.find('div[data-field=entry-link-blank-window]').show();
-                    break;
-                case 1:
-                    container.find('div[data-field=entry-link-file-selector]').hide();
-                    container.find('div[data-field=entry-link-page-selector]').show();
-                    container.find('div[data-field=entry-link-url]').hide();
-                    container.find('div[data-field=entry-link-blank-window]').show();
-                    break;
-                default:
-                    container.find('div[data-field=entry-link-file-selector]').hide();
-                    container.find('div[data-field=entry-link-page-selector]').hide();
-                    container.find('div[data-field=entry-link-url]').hide();
-                    container.find('div[data-field=entry-link-blank-window]').hide();
-                    break;
-            }
+            refreshLinkTypeControls($(this));
         });
+
+        function refreshLinkTypeControls(selector) {
+            var container = selector.closest('.ccm-manualnav-entry');
+            var linkType = parseInt(selector.val());
+
+            // linkType: None = 0, Page URL = 1, External URL = 2, File = 3
+            container.find('div[data-field=entry-link-page-selector]').toggle(linkType === 1);
+            container.find('div[data-field=entry-link-url]').toggle(linkType === 2);
+            container.find('div[data-field=entry-link-file-selector]').toggle(linkType === 3);
+            container.find('div[data-field=entry-link-blank-window]').toggle( linkType > 0);
+        };
 <?php
 if ($rows) {
     foreach ($rows as $row) {
@@ -125,15 +110,7 @@ if ($rows) {
         } ?>
                 manualnavEntriesContainer.append(_templateSlide({
                     fID: '<?php echo $row['fID']; ?>',
-        <?php if (File::getByID($row['fID'])) {
-            ?>
-                    image_url: '<?php echo File::getByID($row['fID'])->getThumbnailURL('file_manager_listing'); ?>',
-        <?php
-        } else {
-            ?>
-                    image_url: '',
-        <?php
-        } ?>
+                    image_url: '<?php echo File::getByID($row['fID']) ? File::getByID($row['fID'])->getThumbnailURL('file_manager_listing') : ''; ?>',
                     icon: '<?php echo $row['icon']; ?>',
                     icons: <?php echo json_encode($icons); ?>,
                     link_url: '<?php echo $row['linkURL']; ?>',
@@ -142,26 +119,17 @@ if ($rows) {
                     sort_order: '<?php echo $row['sortOrder']; ?>',
                     openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
-                        manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
-                    'inputName': 'internalLinkCID[]', 'cID': <?php if ($linkType == 1) {
-            ?><?php echo (int)$row['internalLinkCID']; ?><?php
-        } else {
-            ?>false<?php
-        } ?>
-                            });
+                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
+                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ?  (int)$row['internalLinkCID'] : 'false'; ?>
+                });
 
-                    manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                        'inputName': 'internalLinkFID[]', 'cID': <?php if ($linkType == 3) {
-            ?><?php echo (int)$row['internalLinkFID']; ?><?php
-        } else {
-            ?>false<?php
-        } ?>
-                    });
+                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
+                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int)$row['internalLinkFID']: 'false'; ?>
+                });
         <?php
     }
 }
 ?>
-
                     doSortCount();
                     manualnavEntriesContainer.find('select[data-field=entry-link-select]').trigger('change');
                     $('.ccm-add-manualnav-entry').click(function () {
