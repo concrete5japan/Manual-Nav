@@ -300,7 +300,7 @@ if ($rows) {
 
                     <div style="display: none;" data-field="entry-link-url" class="form-group">
                         <label><?php echo t('URL:'); ?></label>
-                        <textarea name="linkURL[]"><%=link_url%></textarea>
+                        <input type="text" name="linkURL[]" value="<%=link_url%>">
                     </div>
 
                     <div style="display: none;" data-field="entry-link-page-selector" class="form-group">
