@@ -181,9 +181,9 @@ class Controller extends BlockController
         $i = 0;
         parent::save($args);
         while ($i < $count) {
-            $linkURL = $args['linkURL'][$i];
-            $internalLinkCID = $args['internalLinkCID'][$i];
-            $internalLinkFID = $args['internalLinkFID'][$i];
+            $linkURL = h($args['linkURL'][$i]);
+            $internalLinkCID = h($args['internalLinkCID'][$i]);
+            $internalLinkFID = h($args['internalLinkFID'][$i]);
             switch ((int)$args['linkType'][$i]) {
                 case 1:
                     $linkURL = '';
@@ -204,10 +204,10 @@ class Controller extends BlockController
 
             $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $this->bID,
-                $args['fID'][$i],
-                $args['icon'][$i],
-                $args['title'][$i],
-                $args['sortOrder'][$i],
+                h($args['fID'][$i]),
+                h($args['icon'][$i]),
+                h($args['title'][$i]),
+                h($args['sortOrder'][$i]),
                 $linkURL,
                 $internalLinkCID,
                 $internalLinkFID,
