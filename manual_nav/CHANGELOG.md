@@ -4,6 +4,7 @@
 
 ## 2.3.0
 - concrete5 version requirement 8.0
+- File download link option
 - Update deprecated codes
 - CSRF token validation
 
