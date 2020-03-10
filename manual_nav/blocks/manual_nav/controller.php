@@ -115,8 +115,10 @@ class Controller extends BlockController
                 $q['collectionName'] = $lc->getCollectionName();
             } elseif (!$q['linkURL'] && $q['internalLinkFID']) {
                 $file = File::getByID((int) $q['internalLinkFID']);
-                $q['linkURL'] = $file->getDownloadURL();
-                $q['collectionName'] = $file->getFileName();
+                if (is_object($file)) {
+                    $q['linkURL'] = $file->getDownloadURL();
+                    $q['collectionName'] = $file->getFileName();
+                }
             }
 
             //image type
