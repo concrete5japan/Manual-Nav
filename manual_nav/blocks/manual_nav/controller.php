@@ -202,7 +202,7 @@ class Controller extends BlockController
                 $args['fID'][$i] = 0;
             }
 
-            $openInNewWindow = $args['openInNewWindow'][$i] == null ? 0 : 1;
+            $openInNewWindow = $args['openInNewWindow'][$i] == 1 ? 1 : 0;
 
             $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, title, sortOrder, linkURL, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $this->bID,

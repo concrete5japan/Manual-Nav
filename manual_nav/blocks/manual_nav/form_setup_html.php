@@ -176,6 +176,11 @@ if ($rows) {
                             $('.ccm-block-manualnav-select-icon').show();
                         }
                     });
+
+                    $(document).on('change', '[name^=openInNewWindowCheck]', function() {
+                        $(this).prev().val($(this).prop('checked') ? 1 : 0);
+                    });
+
                     attachDelete($('.ccm-delete-manualnav-entry'));
                     attachSortAsc($('i.fa-sort-asc'));
                     attachSortDesc($('i.fa-sort-desc'));
@@ -319,7 +324,9 @@ if ($rows) {
             </div>
 
             <div class="checkbox" style="display: none;" data-field="entry-link-blank-window" class="form-group">
-                <label><input type="checkbox" <% if(openInNewWindow==1){ %>checked <% } %> name="openInNewWindow[<%=sort_order%>]" value="1"  />
+                <label>
+                    <input type="hidden" name="openInNewWindow[<%=sort_order%>]" value="<% if(openInNewWindow==1){ %>1<% }else{ %>0 <% } %>"/>
+                    <input type="checkbox" <% if(openInNewWindow==1){ %>checked <% } %> name="openInNewWindowCheck[<%=sort_order%>]" value="1"  />
                     <?php echo t('Open Link in New Window'); ?>
                 </label>
             </div>
