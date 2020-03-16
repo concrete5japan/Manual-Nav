@@ -1,3 +1,7 @@
+## 2.3.2
+- Fix file was deleted from dashboard
+- Fix not work edit mode [not work Open Link in New Window] when new entiry.
+
 ## 2.3.1
 - Change custom URL field type from textarea to text
 - Add input filtering
