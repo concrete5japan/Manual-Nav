@@ -109,12 +109,18 @@ class Controller extends BlockController
         // in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
         $rows = [];
         foreach ($r as $q) {
+            // Update the variable types
+            $q['fID'] = (int) $q['fID'];
+            $q['cID'] = (int) $q['cID'];
+            $q['internalLinkCID'] = (int) $q['internalLinkCID'];
+            $q['internalLinkFID'] = (int) $q['internalLinkFID'];
+
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
                 $q['linkURL'] = ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
                 $q['collectionName'] = $lc->getCollectionName();
             } elseif (!$q['linkURL'] && $q['internalLinkFID']) {
-                $file = File::getByID((int) $q['internalLinkFID']);
+                $file = File::getByID($q['internalLinkFID']);
                 if (is_object($file)) {
                     $q['linkURL'] = $file->getDownloadURL();
                     $q['collectionName'] = $file->getFileName();
