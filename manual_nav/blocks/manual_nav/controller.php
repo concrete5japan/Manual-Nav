@@ -31,6 +31,26 @@ class Controller extends BlockController
         return t('Manual Nav');
     }
 
+    public function on_start()
+    {
+        // Set font awesome icons
+        $classes = $this->getIconClasses();
+        $icons = ['' => t('Choose Icon')];
+        $txt = $this->app->make('helper/text');
+        foreach ($classes as $class) {
+            $icons[$class] = $txt->unhandle($class);
+        }
+        $this->set('icons', $icons);
+    }
+
+    public function registerViewAssets($outputContent = '')
+    {
+        $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
+        $this->requireAsset('css', 'font-awesome');
+    }
+
     public function getSearchableContent()
     {
         $content = '';
@@ -45,41 +65,11 @@ class Controller extends BlockController
         return $content;
     }
 
-    public function add()
-    {
-        $this->requireAsset('core/file-manager');
-        $this->requireAsset('core/sitemap');
-        $this->requireAsset('redactor');
-
-        $this->requireAsset('css', 'font-awesome');
-        $classes = $this->getIconClasses();
-        $icons = ['' => t('Choose Icon')];
-        $txt = $this->app->make('helper/text');
-        foreach ($classes as $class) {
-            $icons[$class] = $txt->unhandle($class);
-        }
-        $this->set('icons', $icons);
-    }
-
     public function edit()
     {
-        $this->requireAsset('core/sitemap');
-        $this->requireAsset('core/file-manager');
-        $this->requireAsset('redactor');
-
-        $this->requireAsset('css', 'font-awesome');
         $db = $this->app->make('database')->connection();
         $query = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         $this->set('rows', $query);
-
-        $this->requireAsset('css', 'font-awesome');
-        $classes = $this->getIconClasses();
-        $icons = ['' => t('Choose Icon')];
-        $txt = Core::make('helper/text');
-        foreach ($classes as $class) {
-            $icons[$class] = $txt->unhandle($class);
-        }
-        $this->set('icons', $icons);
     }
 
     protected function getIconClasses()
