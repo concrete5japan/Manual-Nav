@@ -152,7 +152,7 @@ class Controller extends BlockController
         $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
-        while ($row = $r->FetchRow()) {
+        while ($row = $r->fetch()) {
             $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $newBID,
                 $row['fID'],
