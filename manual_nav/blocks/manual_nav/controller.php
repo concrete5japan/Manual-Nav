@@ -4,7 +4,6 @@ namespace Concrete\Package\ManualNav\Block\ManualNav;
 use Concrete\Core\Block\BlockController;
 use Page;
 use File;
-use Core;
 use Less_Parser;
 use Less_Tree_Rule;
 
