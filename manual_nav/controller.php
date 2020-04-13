@@ -11,7 +11,7 @@ class Controller extends Package
 {
     protected $pkgHandle = 'manual_nav';
     protected $appVersionRequired = '8.0';
-    protected $pkgVersion = '2.3.2';
+    protected $pkgVersion = '2.3.3';
     protected static $blockTypes = [
         [
             'handle' => 'manual_nav', 'set' => 'navigation',
