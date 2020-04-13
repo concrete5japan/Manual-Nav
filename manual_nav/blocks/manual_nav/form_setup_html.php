@@ -120,11 +120,11 @@ if ($rows) {
                     openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
                 manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
-                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ?  (int)$row['internalLinkCID'] : 'false'; ?>
+                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ? (int) $row['internalLinkCID'] : 'false'; ?>
                 });
 
                 manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int)$row['internalLinkFID']: 'false'; ?>
+                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int) $row['internalLinkFID'] : 'false'; ?>
                 });
         <?php
     }
