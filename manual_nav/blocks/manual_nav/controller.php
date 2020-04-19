@@ -4,7 +4,6 @@ namespace Concrete\Package\ManualNav\Block\ManualNav;
 use Concrete\Core\Block\BlockController;
 use Page;
 use File;
-use Core;
 use Less_Parser;
 use Less_Tree_Rule;
 
@@ -31,6 +30,26 @@ class Controller extends BlockController
         return t('Manual Nav');
     }
 
+    public function on_start()
+    {
+        // Set font awesome icons
+        $classes = $this->getIconClasses();
+        $icons = ['' => t('Choose Icon')];
+        $txt = $this->app->make('helper/text');
+        foreach ($classes as $class) {
+            $icons[$class] = $txt->unhandle($class);
+        }
+        $this->set('icons', $icons);
+    }
+
+    public function registerViewAssets($outputContent = '')
+    {
+        $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
+        $this->requireAsset('css', 'font-awesome');
+    }
+
     public function getSearchableContent()
     {
         $content = '';
@@ -45,41 +64,11 @@ class Controller extends BlockController
         return $content;
     }
 
-    public function add()
-    {
-        $this->requireAsset('core/file-manager');
-        $this->requireAsset('core/sitemap');
-        $this->requireAsset('redactor');
-
-        $this->requireAsset('css', 'font-awesome');
-        $classes = $this->getIconClasses();
-        $icons = ['' => t('Choose Icon')];
-        $txt = $this->app->make('helper/text');
-        foreach ($classes as $class) {
-            $icons[$class] = $txt->unhandle($class);
-        }
-        $this->set('icons', $icons);
-    }
-
     public function edit()
     {
-        $this->requireAsset('core/sitemap');
-        $this->requireAsset('core/file-manager');
-        $this->requireAsset('redactor');
-
-        $this->requireAsset('css', 'font-awesome');
         $db = $this->app->make('database')->connection();
         $query = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         $this->set('rows', $query);
-
-        $this->requireAsset('css', 'font-awesome');
-        $classes = $this->getIconClasses();
-        $icons = ['' => t('Choose Icon')];
-        $txt = Core::make('helper/text');
-        foreach ($classes as $class) {
-            $icons[$class] = $txt->unhandle($class);
-        }
-        $this->set('icons', $icons);
     }
 
     protected function getIconClasses()
@@ -158,7 +147,7 @@ class Controller extends BlockController
         $v = [$this->bID];
         $q = 'select * from btManualNavEntries where bID = ?';
         $r = $db->query($q, $v);
-        while ($row = $r->FetchRow()) {
+        while ($row = $r->fetch()) {
             $db->executeQuery('INSERT INTO btManualNavEntries (bID, fID, icon, linkURL, title, sortOrder, internalLinkCID, internalLinkFID, openInNewWindow) values(?,?,?,?,?,?,?,?,?)', [
                 $newBID,
                 $row['fID'],
