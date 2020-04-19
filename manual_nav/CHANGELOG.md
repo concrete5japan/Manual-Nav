@@ -1,3 +1,6 @@
+## 2.3.3
+- Fix New window location got changed on re-arranging the links
+
 ## 2.3.2
 - Fix file was deleted from dashboard
 - Fix not work edit mode [not work Open Link in New Window] when new entiry.

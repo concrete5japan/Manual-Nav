@@ -120,11 +120,11 @@ if ($rows) {
                     openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
                 manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
-                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ?  (int)$row['internalLinkCID'] : 'false'; ?>
+                    'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ? (int) $row['internalLinkCID'] : 'false'; ?>
                 });
 
                 manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int)$row['internalLinkFID']: 'false'; ?>
+                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int) $row['internalLinkFID'] : 'false'; ?>
                 });
         <?php
     }
@@ -325,7 +325,7 @@ if ($rows) {
 
             <div class="checkbox" style="display: none;" data-field="entry-link-blank-window" class="form-group">
                 <label>
-                    <input type="hidden" name="openInNewWindow[<%=sort_order%>]" value="<% if(openInNewWindow==1){ %>1<% }else{ %>0 <% } %>"/>
+                    <input type="hidden" name="openInNewWindow[]" value="<% if(openInNewWindow==1){ %>1<% }else{ %>0 <% } %>"/>
                     <input type="checkbox" <% if(openInNewWindow==1){ %>checked <% } %> name="openInNewWindowCheck[<%=sort_order%>]" value="1"  />
                     <?php echo t('Open Link in New Window'); ?>
                 </label>
