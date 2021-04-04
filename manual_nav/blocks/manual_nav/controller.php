@@ -106,8 +106,10 @@ class Controller extends BlockController
 
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
-                $q['linkURL'] = ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
-                $q['collectionName'] = $lc->getCollectionName();
+                if (is_object($lc)) {
+                    $q['linkURL'] = ($lc->getCollectionPointerExternalLink() != '') ? $lc->getCollectionPointerExternalLink() : $lc->getCollectionLink();
+                    $q['collectionName'] = $lc->getCollectionName();
+                }
             } elseif (!$q['linkURL'] && $q['internalLinkFID']) {
                 $file = File::getByID($q['internalLinkFID']);
                 if (is_object($file)) {
@@ -123,7 +125,10 @@ class Controller extends BlockController
                     $q['image'] = $lc->getAttribute('thumbnail');
                 }
             } elseif ($this->displayImage == 2) {
-                $q['image'] = File::getByID($q['fID']);
+                $file = File::getByID($q['fID']);
+                 if (is_object($file)) {
+                    $q['image'] = $file;
+                }
             }
 
             $q['isVectorImage'] = false;
