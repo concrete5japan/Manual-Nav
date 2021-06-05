@@ -1,3 +1,8 @@
+## 2.3.4
+- Removed an unnecessary class attribute from the edit form
+- Stop loading the libraries in front-end which are only needed in edit mode
+- Fixed the JS error when using the themes which don’t use jQuery
+
 ## 2.3.3
 - Fix New window location got changed on re-arranging the links
 
