@@ -44,10 +44,9 @@ class Controller extends BlockController
 
     public function registerViewAssets($outputContent = '')
     {
-        $this->requireAsset('core/file-manager');
-        $this->requireAsset('core/sitemap');
-        $this->requireAsset('redactor');
-        $this->requireAsset('css', 'font-awesome');
+        if ($this->displayImage == 3) {
+            $this->requireAsset('css', 'font-awesome');
+        }
     }
 
     public function getSearchableContent()
@@ -64,8 +63,20 @@ class Controller extends BlockController
         return $content;
     }
 
+    public function add()
+    {
+        $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
+        $this->requireAsset('css', 'font-awesome');
+    }
+
     public function edit()
     {
+        $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('redactor');
+        $this->requireAsset('css', 'font-awesome');
         $db = $this->app->make('database')->connection();
         $query = $db->fetchAll('SELECT * from btManualNavEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
         $this->set('rows', $query);
