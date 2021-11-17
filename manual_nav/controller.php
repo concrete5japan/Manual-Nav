@@ -1,17 +1,18 @@
 <?php
+
 namespace Concrete\Package\ManualNav;
 
-use Package;
-use BlockType;
-use BlockTypeSet;
+use Concrete\Core\Block\BlockType\BlockType;
+use Concrete\Core\Block\BlockType\Set as BlockTypeSet;
+use Concrete\Core\Package\Package;
 
-defined('C5_EXECUTE') or die(_('Access Denied.'));
+defined('C5_EXECUTE') or die('Access Denied.');
 
 class Controller extends Package
 {
     protected $pkgHandle = 'manual_nav';
     protected $appVersionRequired = '8.0';
-    protected $pkgVersion = '2.3.4';
+    protected $pkgVersion = '2.4.0';
     protected static $blockTypes = [
         [
             'handle' => 'manual_nav', 'set' => 'navigation',

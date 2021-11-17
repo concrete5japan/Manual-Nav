@@ -1,6 +1,17 @@
 <?php
+
+use Concrete\Core\Html\Service\FontAwesomeIcon;
+use Concrete\Core\Page\Page;
+use Concrete\Core\Support\Facade\Application;
+use HtmlObject\Image;
+
 defined('C5_EXECUTE') or die('Access Denied.');
-$c = Page::getCurrentPage();
+
+$app = Application::getFacadeApplication();
+$im = $app->make('helper/image');
+$rows = isset($rows) ? $rows : [];
+$displayImage = isset($displayImage) ? $displayImage : 0;
+$c = isset($c) ? $c : Page::getCurrentPage();
 ?>
 
 <?php
@@ -26,6 +37,7 @@ if (count($rows) > 0) {
         }
 
         $tag = '';
+        $icon = '';
         if ($displayImage >= 1 && $displayImage <= 2) {
             if (is_object($row['image'])) {
                 if ($row['isVectorImage']) {
@@ -33,15 +45,20 @@ if (count($rows) > 0) {
 //                        $tag = $image->getTag();
                     $tag = '<img src="' . $row['image']->getURL() . '" width="100px" height="100px">';
                 } else {
-                    $im = Core::make('helper/image');
                     $thumb = $im->getThumbnail($row['image'], 100, 100);
-                    $tag = new \HtmlObject\Image();
+                    $tag = new Image();
                     $tag->src($thumb->src)->width($thumb->width)->height($thumb->height);
                     $tag->alt(h($title));
                 }
             }
         } elseif ($displayImage == 3) {
-            $icon = '<i class="fa fa-' . $row['icon'] . '" area-hidden="true"></i>';
+            if (class_exists(FontAwesomeIcon::class)) {
+                // V9
+                $icon = FontAwesomeIcon::getFromClassNames($row['icon'])->getTag();
+            } else {
+                // V8
+                $icon = '<i class="fa fa-' . $row['icon'] . '" area-hidden="true"></i>';
+            }
         } ?>
 
             <li class="<?php echo $row['class']; ?>">

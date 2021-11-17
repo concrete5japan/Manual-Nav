@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2021-11-15T22:37:37+09:00\n"
 "PO-Revision-Date: 2021-11-15T22:37:37+09:00\n"
-"Language: ja_JP\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: packages/manual_nav/controller.php:24
 msgid "Manual Nav let you create navigation whatever you would like manually. It's concrete5.7 version of Jordan Lev's famous Manual Nav but developed independently by acliss19xx from concrete5 Japan community."
@@ -19,11 +19,11 @@ msgstr ""
 #: packages/manual_nav/controller.php:29
 #: packages/manual_nav/blocks/manual_nav/controller.php:34
 msgid "Manual Nav"
-msgstr "マニュアルナビ"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/controller.php:29
 msgid "Manual Nav."
-msgstr "マニュアルナビ。"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/controller.php:231
 msgid "Choose Icon"
@@ -31,23 +31,23 @@ msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:17
 msgid "Include Image."
-msgstr "画像を含める"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:19
 msgid "Image None"
-msgstr "画像なし"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:20
 msgid "Use page attribute. Handle name is thumbnail"
-msgstr "thumbnailページ属性を使う"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:21
 msgid "Image setting here"
-msgstr "ここで設定する"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:22
 msgid "Use font awesome icon"
-msgstr "font awesome アイコンを使う"
+msgstr ""
 
 #: packages/manual_nav/blocks/manual_nav/form_setup_html.php:35
 msgid "Are you sure?"

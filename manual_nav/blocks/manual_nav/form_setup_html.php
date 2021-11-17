@@ -1,11 +1,17 @@
 <?php
+
+use Concrete\Core\Support\Facade\Application;
+use Concrete\Core\File\File;
+
 defined('C5_EXECUTE') or die('Access Denied.');
 
-$app = \Concrete\Core\Support\Facade\Application::getFacadeApplication();
-$token = $app->make('helper/validation/token');
+/** @var \Concrete\Core\View\AbstractView $view */
+$displayImage = isset($displayImage) ? $displayImage : 0;
+$rows = isset($rows) ? $rows : [];
+$icons = isset($icons) ? $icons : [];
 
-$fp = FilePermissions::getGlobal();
-$tp = new TaskPermission();
+$app = Application::getFacadeApplication();
+$token = $app->make('helper/validation/token');
 ?>
 <div class="form-group">
     <label><?php echo t('Include Image.'); ?></label>
@@ -99,6 +105,16 @@ $tp = new TaskPermission();
 <?php
 if ($rows) {
     foreach ($rows as $row) {
+        $image_url = '';
+        $f = File::getByID($row['fID']);
+        if ($f && $f->getVersion()->getTypeObject()->supportsThumbnails()) {
+            $image_url = $f->getThumbnailURL('file_manager_listing');
+        }
+        $internalLinkFileTitle = '';
+        $internalLinkFile = File::getByID($row['internalLinkFID']);
+        if ($internalLinkFile) {
+            $internalLinkFileTitle = $internalLinkFile->getVersion()->getTitle();
+        }
         if ($row['internalLinkFID']) {
             $linkType = 3;
         } elseif ($row['linkURL']) {
@@ -109,23 +125,35 @@ if ($rows) {
             $linkType = 0;
         } ?>
                 manualnavEntriesContainer.append(_templateSlide({
-                    fID: '<?php echo $row['fID']; ?>',
-                    image_url: '<?php echo File::getByID($row['fID']) ? File::getByID($row['fID'])->getThumbnailURL('file_manager_listing') : ''; ?>',
-                    icon: '<?php echo $row['icon']; ?>',
+                    fID: '<?php echo h($row['fID']); ?>',
+                    image_url: '<?php echo h($image_url); ?>',
+                    icon: '<?php echo h($row['icon']); ?>',
                     icons: <?php echo json_encode($icons); ?>,
-                    link_url: '<?php echo $row['linkURL']; ?>',
-                    link_type: '<?php echo $linkType; ?>',
-                    title: '<?php echo addslashes($row['title']); ?>',
-                    sort_order: '<?php echo $row['sortOrder']; ?>',
+                    link_url: '<?php echo h($row['linkURL']); ?>',
+                    link_type: '<?php echo h($linkType); ?>',
+                    title: '<?php echo h($row['title']); ?>',
+                    sort_order: '<?php echo h($row['sortOrder']); ?>',
+                    internalLinkFID: '<?php echo h($row['internalLinkFID']); ?>',
+                    internalLinkFileTitle: '<?php echo h($internalLinkFileTitle); ?>',
                     openInNewWindow : '<?php echo $row['openInNewWindow']; ?>'
                 }));
                 manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({
                     'inputName': 'internalLinkCID[]', 'cID': <?php echo $linkType === 1 ? (int) $row['internalLinkCID'] : 'false'; ?>
                 });
 
-                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child div[data-field=entry-link-file-selector]').concreteFileSelector({
-                    'inputName': 'internalLinkFID[]', 'fID': <?php echo $linkType === 3 ? (int) $row['internalLinkFID'] : 'false'; ?>
-                });
+                manualnavEntriesContainer.find('.ccm-manualnav-entry:last-child button[data-field=entry-link-file-selector-select]').each(function () {
+                    $(this).on('click', function () {
+                        var oldLauncher = $(this);
+                        ConcreteFileManager.launchDialog(function(data) {
+                            ConcreteFileManager.getFileDetails(data.fID, function (r) {
+                                jQuery.fn.dialog.hideLoader();
+                                var file = r.files[0];
+                                oldLauncher.text(file.title);
+                                oldLauncher.next('.image-fID').val(file.fID)
+                            })
+                        })
+                    })
+                })
         <?php
     }
 }
@@ -144,6 +172,8 @@ if ($rows) {
                             link_type: 0,
                             sort_order: '',
                             image_url: '',
+                            internalLinkFID: 0,
+                            internalLinkFileTitle: '',
                             openInNewWindow: 0
                         }));
 
@@ -154,9 +184,19 @@ if ($rows) {
                         newSlide.find('div[data-field=entry-link-page-selector-select]').concretePageSelector({
                             'inputName': 'internalLinkCID[]'
                         });
-                        newSlide.find('div[data-field=entry-link-file-selector-select]').concreteFileSelector({
-                            'inputName': 'internalLinkFID[]'
-                        });
+                        newSlide.find('button[data-field=entry-link-file-selector-select]').each(function () {
+                            $(this).on('click', function () {
+                                var oldLauncher = $(this);
+                                ConcreteFileManager.launchDialog(function(data) {
+                                    ConcreteFileManager.getFileDetails(data.fID, function (r) {
+                                        jQuery.fn.dialog.hideLoader();
+                                        var file = r.files[0];
+                                        oldLauncher.html(file.title);
+                                        oldLauncher.next('.image-fID').val(file.fID)
+                                    })
+                                })
+                            })
+                        })
 
                         attachSortDesc(newSlide.find('i.fa-sort-desc'));
                         attachSortAsc(newSlide.find('i.fa-sort-asc'));
@@ -190,7 +230,11 @@ if ($rows) {
                 var iconPreview = function(obj){
                     $(obj).next().removeClass();
                     if($(obj).val()) {
+                        <?php if (class_exists(\Concrete\Core\Html\Service\FontAwesomeIcon::class)) { ?>
+                        $(obj).next().addClass($(obj).val());
+                        <?php } else { ?>
                         $(obj).next().addClass('fa fa-' + $(obj).val());
+                        <?php } ?>
                     }
                 }
 </script>
@@ -257,8 +301,8 @@ if ($rows) {
 </div>
 <script type="text/template" id="imageTemplate">
 <div class="ccm-manualnav-entry well">
-    <i class="fa fa-sort-desc"></i>
-    <i class="fa fa-sort-asc"></i>
+    <i class="fa fa-sort-desc fas fa-sort-down"></i>
+    <i class="fa fa-sort-asc fas fa-sort-up"></i>
     <div class="form-group">
         <span class="btn btn-danger ccm-delete-manualnav-entry"><?php echo t('Delete Link'); ?></span>
     </div>
@@ -270,7 +314,7 @@ if ($rows) {
                     <% if (image_url.length > 0) { %>
                     <img src="<%= image_url %>" />
                     <% } else { %>
-                    <i class="fa fa-picture-o"></i>
+                    <i class="fa fa-picture-o far fa-image"></i>
                     <% } %>
                 </div>
                 <input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>" />
@@ -281,7 +325,11 @@ if ($rows) {
                         <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
                     <% }); %>
                 </select>
-                <i data-preview="icon" <%if(icon) { %>class="fa fa-<%=icon%>"<% } %>></i>
+                <?php if (class_exists(\Concrete\Core\Html\Service\FontAwesomeIcon::class)) { ?>
+                    <i data-preview="icon" <%if(icon) { %>class="<%=icon%>"<% } %>></i>
+                <?php } else { ?>
+                    <i data-preview="icon" <%if(icon) { %>class="fa fa-<%=icon%>"<% } %>></i>
+                <?php } ?>
             </div>
         </div>
         <div class="col-md-9">
@@ -313,8 +361,15 @@ if ($rows) {
                         <div data-field="entry-link-page-selector-select"></div>
                     </div>
 
-                    <div style="display: none;" data-field="entry-link-file-selector" class="ccm-file-selector">
-                        <div data-field="entry-link-file-selector-select"></div>
+                    <div style="display: none;" data-field="entry-link-file-selector">
+                        <button type="button" class="btn btn-secondary btn-default" data-field="entry-link-file-selector-select">
+                            <% if (internalLinkFileTitle) { %>
+                            <%- internalLinkFileTitle %>
+                            <% } else { %>
+                            <?php echo t('Choose File') ?>
+                            <% } %>
+                        </button>
+                        <input type="hidden" name="<?php echo $view->field('internalLinkFID'); ?>[]" class="image-fID" value="<%=internalLinkFID%>" />
                     </div>
 
 
