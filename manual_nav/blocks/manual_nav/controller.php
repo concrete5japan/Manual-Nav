@@ -126,6 +126,10 @@ class Controller extends BlockController
                 }
             }
 
+            if (!isset($q['class'])) {
+                $q['class'] = '';
+            }
+
             $rows[] = $q;
         }
         $this->set('rows', $rows);

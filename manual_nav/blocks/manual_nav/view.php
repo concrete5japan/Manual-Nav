@@ -16,7 +16,7 @@ $c = isset($c) ? $c : Page::getCurrentPage();
 
 <?php
 if (count($rows) > 0) {
-    $rows[0]['class'] = 'nav-first';
+    $rows[0]['class'] .= 'nav-first';
     foreach ($rows as &$rowp) {
         if ($rowp['internalLinkCID'] === $c->getCollectionID()) {
             $rowp['class'] .= ' nav-selected';
