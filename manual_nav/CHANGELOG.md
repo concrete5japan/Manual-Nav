@@ -1,3 +1,6 @@
+## 3.0.0
+- concreteCMS version requirement 9.0
+
 ## 2.3.4
 - Removed an unnecessary class attribute from the edit form
 - Stop loading the libraries in front-end which are only needed in edit mode
