@@ -19,10 +19,11 @@ if (count($rows) > 0) {
     $rows[0]['class'] .= 'nav-first';
     foreach ($rows as &$rowp) {
         if ($rowp['internalLinkCID'] === $c->getCollectionID()) {
-            $rowp['class'] .= ' nav-selected';
+            $rowp['class'] .= 'active nav-selected';
         }
     } ?>
-    <ul class="nav">
+<div class="ccm-block-autonav">
+    <ul class="nav flex-column">
         <?php foreach ($rows as $row) {
         ?>
             <?php
@@ -61,9 +62,9 @@ if (count($rows) > 0) {
             }
         } ?>
 
-            <li class="<?php echo $row['class']; ?>">
+            <li class="nav-item">
 
-                <a href="<?php echo $row['linkURL']; ?>" <?php echo $row['openInNewWindow'] ? 'target="_blank"' : ''; ?>>
+                <a href="<?php echo $row['linkURL']; ?>" class="nav-link <?php echo $row['class']; ?>" <?php echo $row['openInNewWindow'] ? 'target="_blank"' : ''; ?>>
                     <?php echo $tag; ?>
                     <?php echo $icon; ?>
                     <?php echo h($title); ?>
@@ -72,6 +73,7 @@ if (count($rows) > 0) {
         <?php
     } ?>
     </ul>
+</div>
 <?php
 } else {
         ?>
