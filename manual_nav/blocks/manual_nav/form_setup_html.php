@@ -1,9 +1,7 @@
-<?php
+<?php defined('C5_EXECUTE') or die('Access Denied.');
 
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\File\File;
-
-defined('C5_EXECUTE') or die('Access Denied.');
 
 /** @var \Concrete\Core\View\AbstractView $view */
 $displayImage = isset($displayImage) ? $displayImage : 0;

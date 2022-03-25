@@ -1,4 +1,4 @@
-<?php
+<?php defined('C5_EXECUTE') or die('Access Denied.');
 
 use Concrete\Core\Html\Service\FontAwesomeIcon;
 use Concrete\Core\Page\Page;
