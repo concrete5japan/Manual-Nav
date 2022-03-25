@@ -6,8 +6,6 @@ use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Block\BlockType\Set as BlockTypeSet;
 use Concrete\Core\Package\Package;
 
-defined('C5_EXECUTE') or die('Access Denied.');
-
 class Controller extends Package
 {
     protected $pkgHandle = 'manual_nav';
