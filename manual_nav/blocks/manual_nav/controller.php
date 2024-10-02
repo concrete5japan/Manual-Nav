@@ -90,6 +90,7 @@ class Controller extends BlockController
             $q['cID'] = (int) $q['cID'];
             $q['internalLinkCID'] = (int) $q['internalLinkCID'];
             $q['internalLinkFID'] = (int) $q['internalLinkFID'];
+            $q['image'] = $q['image'] ?? null;
 
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
