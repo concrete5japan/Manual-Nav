@@ -188,13 +188,20 @@ class Controller extends BlockController
             switch ((int) $args['linkType'][$i]) {
                 case 1:
                     $linkURL = '';
+                    $internalLinkFID = 0;
                     break;
                 case 2:
+                    $internalLinkCID = 0;
+                    $internalLinkFID = 0;
+                    break;
+                case 3:
+                    $linkURL = '';
                     $internalLinkCID = 0;
                     break;
                 default:
                     $linkURL = '';
                     $internalLinkCID = 0;
+                    $internalLinkFID = 0;
                     break;
             }
             if ($args['fID'][$i] == null) {
