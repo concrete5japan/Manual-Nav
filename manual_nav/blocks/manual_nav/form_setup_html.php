@@ -333,7 +333,7 @@ if ($rows) {
         <div class="col-md-9">
             <div class="form-group">
                 <label><?php echo t('Title'); ?></label>
-                <input type="text" name="<?php echo $view->field('title'); ?>[]" value="<%=title%>" />
+                <input class="form-control" type="text" name="<?php echo $view->field('title'); ?>[]" value="<%=title%>" />
             </div>
             <div class="row">
                 <div class="col-md-4">

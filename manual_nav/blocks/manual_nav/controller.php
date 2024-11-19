@@ -90,6 +90,7 @@ class Controller extends BlockController
             $q['cID'] = (int) $q['cID'];
             $q['internalLinkCID'] = (int) $q['internalLinkCID'];
             $q['internalLinkFID'] = (int) $q['internalLinkFID'];
+            $q['image'] = $q['image'] ?? null;
 
             if (!$q['linkURL'] && $q['internalLinkCID']) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
@@ -188,13 +189,20 @@ class Controller extends BlockController
             switch ((int) $args['linkType'][$i]) {
                 case 1:
                     $linkURL = '';
+                    $internalLinkFID = 0;
                     break;
                 case 2:
+                    $internalLinkCID = 0;
+                    $internalLinkFID = 0;
+                    break;
+                case 3:
+                    $linkURL = '';
                     $internalLinkCID = 0;
                     break;
                 default:
                     $linkURL = '';
                     $internalLinkCID = 0;
+                    $internalLinkFID = 0;
                     break;
             }
             if ($args['fID'][$i] == null) {
