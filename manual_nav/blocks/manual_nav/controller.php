@@ -122,7 +122,7 @@ class Controller extends BlockController
             $q['isVectorImage'] = false;
             if ($this->displayImage) {
                 $ex = ['svg'];
-                if (is_object($q['image'])) {
+                if (isset($q['image']) && is_object($q['image'])) {
                     $q['isVectorImage'] = in_array(strtolower($fh->getExtension($q['image']->getFilename())), $ex, true);
                 }
             }

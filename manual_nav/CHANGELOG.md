@@ -1,3 +1,6 @@
+## 3.0.2
+- Fix undefined key error
+
 ## 3.0.1
 - Clear all not used links related with link type
 - Fix undefined key error
