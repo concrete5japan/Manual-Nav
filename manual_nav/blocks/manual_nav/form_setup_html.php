@@ -13,7 +13,7 @@ $token = $app->make('helper/validation/token');
 ?>
 <div class="form-group">
     <label><?php echo t('Include Image.'); ?></label>
-    <select data-field="entry-image-select" name="displayImage" class="form-control" style="width: 60%;">
+    <select data-field="entry-image-select" name="displayImage" class="form-select" style="width: 60%;">
         <option value="0" <?php echo $displayImage == 0 ? 'selected' : ''; ?>><?php echo t('Image None'); ?></option>
         <option value="1" <?php echo $displayImage == 1 ? 'selected' : ''; ?>><?php echo t('Use page attribute. Handle name is thumbnail'); ?></option>
         <option value="2" <?php echo $displayImage == 2 ? 'selected' : ''; ?>><?php echo t('Image setting here'); ?></option>
@@ -318,7 +318,7 @@ if ($rows) {
                 <input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>" />
             </div>
             <div class="form-group ccm-block-manualnav-select-icon" style="margin-right: 5px;">
-                <select id="icon2" name="<?php echo $view->field('icon') . '[]'; ?>" class="form-control" onchange="iconPreview(this)">
+                <select id="icon2" name="<?php echo $view->field('icon') . '[]'; ?>" class="form-select" onchange="iconPreview(this)">
                     <% _.each(icons,function(val,key){ %>
                         <option value="<%=key%>" <%if(icon == key){%> selected <% } %>><%=val%></option>
                     <% }); %>
@@ -339,7 +339,7 @@ if ($rows) {
                 <div class="col-md-4">
                     <div class="form-group">
                         <label><?php echo t('Link'); ?></label>
-                        <select data-field="entry-link-select" name="linkType[]" class="form-control">
+                        <select data-field="entry-link-select" name="linkType[]" class="form-select">
                             <option value="0" <% if (!link_type) { %>selected<% } %>><?php echo t('None'); ?></option>
                             <option value="1" <% if (link_type == 1) { %>selected<% } %>><?php echo t('Another Page'); ?></option>
                             <option value="2" <% if (link_type == 2) { %>selected<% } %>><?php echo t('External URL'); ?></option>
