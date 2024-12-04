@@ -19,7 +19,7 @@ if (count($rows) > 0) {
     $rows[0]['class'] .= 'nav-first';
     foreach ($rows as &$rowp) {
         if ($rowp['internalLinkCID'] === $c->getCollectionID()) {
-            $rowp['class'] .= 'active nav-selected';
+            $rowp['class'] .= ' active nav-selected';
         }
     } ?>
 <div class="ccm-block-autonav">
