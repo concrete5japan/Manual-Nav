@@ -106,6 +106,10 @@ class Controller extends BlockController
                 }
             }
 
+            if (!isset($q['collectionName'])) {
+                $q['collectionName'] = null;
+            }
+
             //image type
             if ($this->displayImage == 1) {
                 $lc = Page::getByID($q['internalLinkCID'], 'ACTIVE');
